@@ -41,6 +41,8 @@ void C_Player::Action()
 
 void C_Player::Update()
 {
+	m_pos += m_move;
+	m_move = { 0,0 };
 	Math::Matrix m_trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y,0);
 	m_mat = m_trans;
 }
