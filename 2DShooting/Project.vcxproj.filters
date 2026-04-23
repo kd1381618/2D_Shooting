@@ -46,14 +46,17 @@
     <Filter Include="Src\Application\Manager">
       <UniqueIdentifier>{97aa1a3a-6bc9-407c-b386-866599315031}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Player">
-      <UniqueIdentifier>{7720b2eb-92f1-4369-be89-1434b47348d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Chara">
       <UniqueIdentifier>{7e4ddc97-49e8-4242-b124-0111c1ed70b1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Application\Chara\CharaBase">
       <UniqueIdentifier>{16bcb291-bd21-4d55-aa71-0b1cad43c8fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Back">
+      <UniqueIdentifier>{e7b045ef-0659-4d31-84f6-d103920eafe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Player">
+      <UniqueIdentifier>{b6990306-0ce7-4a10-aa0c-d1a2ada1f78c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,11 +171,14 @@
     <ClInclude Include="Src\Application\Manager\GameOverScene.h">
       <Filter>Src\Application\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Player\Player.h">
-      <Filter>Src\Application\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Chara\CharaBase\CharaBase.h">
       <Filter>Src\Application\Chara\CharaBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Back\Back.h">
+      <Filter>Src\Application\Back</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Player\Player.h">
+      <Filter>Src\Application\Chara\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,11 +260,14 @@
     <ClCompile Include="Src\Application\Manager\GameOverScene.cpp">
       <Filter>Src\Application\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Player\Player.cpp">
-      <Filter>Src\Application\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Chara\CharaBase\CharaBase.cpp">
       <Filter>Src\Application\Chara\CharaBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Back\Back.cpp">
+      <Filter>Src\Application\Back</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Player\Player.cpp">
+      <Filter>Src\Application\Chara\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

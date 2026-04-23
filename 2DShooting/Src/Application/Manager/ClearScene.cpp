@@ -17,8 +17,4 @@ void C_ClearScene::Update()
 {
 
 }
-void C_ClearScene::Init()
-{
 
-
-}

@@ -1,5 +1,27 @@
 #pragma once
-
+struct bullet
+{
+	static const int Num = 2000;
+	float x[Num];
+	float y[Num];
+	float moveX[Num];
+	float moveY[Num];
+	int Flg[Num];
+	float Angle;
+	int shotCnt;
+	float moveAngle;
+	float shotwait;
+	float radius;
+	float speed;
+	float rad[Num];
+	float ang[Num];
+	float anim[Num];
+	Math::Matrix transmat[Num];
+	Math::Matrix scalemat[Num];
+	Math::Matrix mat[Num];
+	Math::Rectangle rect[Num];
+	Math::Color color;
+};
 class C_CharaBase
 {
 public:
@@ -20,8 +42,6 @@ public:
 	int m_hpMax;
 	int m_hp;
 	static const int enemyNum;
-	bool enemyFlg;
-	bool bulletFlg;
-	Math::Vector2 bulletMove;
+	bool m_aliveFlg;
 
 };

@@ -2,6 +2,7 @@
 #include"State.h"
 
 class C_Player;
+class C_Back;
 
 
 
@@ -12,6 +13,12 @@ private:
 
 	C_Player* m_player = nullptr;
 	KdTexture playerBaseTex;
+	KdTexture playerEngineEffectTex;
+	KdTexture playerWeaponTex;
+	KdTexture playerBulletTex;
+
+	C_Back* m_back = nullptr;
+	KdTexture backTex;
 
 	int nowMap;//åªç›ÇÃÉ}ÉbÉvî‘çÜ
 
