@@ -2,11 +2,9 @@
 struct bullet
 {
 	static const int Num = 2000;
-	float x[Num];
-	float y[Num];
-	float moveX[Num];
-	float moveY[Num];
-	int Flg[Num];
+	Math::Vector2 pos[Num];
+	Math::Vector2 move[Num];
+	bool Flg[Num];
 	float Angle;
 	int shotCnt;
 	float moveAngle;
@@ -18,6 +16,7 @@ struct bullet
 	float anim[Num];
 	Math::Matrix transmat[Num];
 	Math::Matrix scalemat[Num];
+	Math::Matrix rotatemat[Num];
 	Math::Matrix mat[Num];
 	Math::Rectangle rect[Num];
 	Math::Color color;
@@ -41,7 +40,6 @@ public:
 	Math::Rectangle m_rect;
 	int m_hpMax;
 	int m_hp;
-	static const int enemyNum;
 	bool m_aliveFlg;
 
 };

@@ -8,6 +8,10 @@ void C_TitleScene::Init()
 	m_titleTex.Load("texture/TitleScene/title.png");
 
 }
+void C_TitleScene::ChangeUpdate()
+{
+
+}
 void C_TitleScene::Update()
 {
 

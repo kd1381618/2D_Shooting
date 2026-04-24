@@ -10,6 +10,7 @@ public:
 
 
 	void Init() override;
+	void ChangeUpdate() override;
 	void Update() override;
 	void Draw() override;
 	void Release() override;

@@ -33,6 +33,10 @@ public:
 		m_currentState->Init();
 
 	}
+	void ChangeUpdate()
+	{
+		m_currentState->ChangeUpdate();
+	}
 
 	void Update()
 	{

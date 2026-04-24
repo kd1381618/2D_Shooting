@@ -17,14 +17,7 @@ void C_GameOverScene::Update()
 {
 
 
-	if(GetAsyncKeyState('T') & 0x8000)//enterキーでタイトルへ戻る
-	{
-		SCENEMANAGER.ChangeState(new C_TitleScene());
-	}
-	if (GetAsyncKeyState('R') & 0x8000)//リトライ
-	{
-		SCENEMANAGER.ChangeState(new C_GameScene());
-	}
+	
 
 
 
@@ -33,6 +26,11 @@ void C_GameOverScene::Update()
 void C_GameOverScene::Init()
 {
 
+
+}
+
+void C_GameOverScene::ChangeUpdate()
+{
 
 }
 

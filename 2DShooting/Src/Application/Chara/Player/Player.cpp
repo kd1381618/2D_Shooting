@@ -15,7 +15,7 @@ C_Player::C_Player()
 	{
 		playerbullet.anim[i] = 0;
 		playerbullet.rect[i] = { 0,0,32,32 };
-		playerbullet.Flg[i] = 0;
+		playerbullet.Flg[i] = false;
 	}
 }
 
@@ -53,11 +53,11 @@ void C_Player::Action()
 			{
 				for (int i = 0; i < playerbullet.Num; i++)
 				{
-					if (playerbullet.Flg[i] == 0)
+					if (playerbullet.Flg[i] == false)
 					{
-						playerbullet.Flg[i] = 1;
-						playerbullet.x[i] = m_pos.x;
-						playerbullet.y[i] = m_pos.y;
+						playerbullet.Flg[i] = true;
+						playerbullet.pos[i].x = m_pos.x;
+						playerbullet.pos[i].y = m_pos.y;
 						playerbullet.shotwait = 10;
 						break;
 					}
@@ -84,12 +84,12 @@ void C_Player::Update()
 	{
 		for (int i = 0; i < playerbullet.Num; i++)
 		{
-			if (playerbullet.Flg[i] == 1)
+			if (playerbullet.Flg[i] == true)
 			{
-				playerbullet.x[i] += 15;
-				if (playerbullet.x[i] >= 720 + 48)
+				playerbullet.pos[i].x += 15;
+				if (playerbullet.pos[i].y >= 720 + 48)
 				{
-					playerbullet.Flg[i] = 0;
+					playerbullet.Flg[i] = false;
 				}
 			}
 		}
@@ -128,7 +128,7 @@ void C_Player::Update()
 	m_EngineEffectMat = m_EnginescaleMat * m_EnginetransMat;
 	for (int i = 0; i < playerbullet.Num; i++)
 	{
-		playerbullet.transmat[i] = Math::Matrix::CreateTranslation(playerbullet.x[i], playerbullet.y[i], 0);
+		playerbullet.transmat[i] = Math::Matrix::CreateTranslation(playerbullet.pos[i].x, playerbullet.pos[i].y, 0);
 		playerbullet.scalemat[i] = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 		playerbullet.mat[i] = playerbullet.scalemat[i] * playerbullet.transmat[i];
 	}
@@ -148,9 +148,11 @@ void C_Player::Draw()
 		SHADER.m_spriteShader.DrawTex(m_WeaponTex, m_weaponrect);
 		for (int i = 0; i < playerbullet.Num; i++)
 		{
-
-			SHADER.m_spriteShader.SetMatrix(playerbullet.mat[i]);
-			SHADER.m_spriteShader.DrawTex(m_bulletTex, playerbullet.rect[i]);
+			if (playerbullet.Flg[i] == true)
+			{
+				SHADER.m_spriteShader.SetMatrix(playerbullet.mat[i]);
+				SHADER.m_spriteShader.DrawTex(m_bulletTex, playerbullet.rect[i]);
+			}
 		}
 	}
 }

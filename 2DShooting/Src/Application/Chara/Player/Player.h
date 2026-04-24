@@ -18,6 +18,11 @@ public:
 	void SetEngineEffectTex(KdTexture* tex) { m_EngineEffectTex = tex; }
 	void SetWeaponTex(KdTexture* tex) { m_WeaponTex = tex; }
 	void SetBulletTex(KdTexture* tex) { m_bulletTex = tex; }
+	void SetBulletFlg(int i, bool flg) { playerbullet.Flg[i] = flg; }
+	Math::Vector2 GetPos() { return m_pos; }
+	int GetBulletNum() { return playerbullet.Num; }
+	Math::Vector2 GetBulletPos(int i) { return playerbullet.pos[i]; }
+	bool GetBulletFlg(int i) { return playerbullet.Flg[i]; }
 
 
 private:
