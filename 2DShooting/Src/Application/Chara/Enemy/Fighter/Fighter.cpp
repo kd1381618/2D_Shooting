@@ -20,7 +20,7 @@ C_Fighter::C_Fighter()
 	for (int i = 0; i < Fighterbullet.Num; i++)
 	{
 		Fighterbullet.Flg[i] = false;
-		Fighterbullet.rect[i] = { 0,0,4,16 };
+		Fighterbullet.rect[i] = { 0,0,16,4 };
 		Fighterbullet.anim[i] = 0;
 	}
 }
@@ -52,8 +52,9 @@ void C_Fighter::Action()
 						Fighterbullet.Flg[i] = true;
 						Fighterbullet.pos[i].x = m_pos[e].x;
 						Fighterbullet.pos[i].y = m_pos[e].y;
-						Fighterbullet.move[i].x = cosf(Angle[e]) * 10;
-						Fighterbullet.move[i].y = sinf(Angle[e]) * 10;
+						Fighterbullet.move[i].x = cosf(Angle[e]) * 9;
+						Fighterbullet.move[i].y = sinf(Angle[e]) * 9;
+						Fighterbullet.deg[i]=GetAngleDeg(m_pos[e].x, m_pos[e].y, player->GetPos().x, player->GetPos().y);
 						shotwait[e] = 60;
 						break;
 					}
@@ -61,6 +62,8 @@ void C_Fighter::Action()
 			}
 		}
 	}
+	
+
 	for (int e = 0; e < FighterNum; e++)
 	{
 		shotwait[e]--;
@@ -74,39 +77,7 @@ void C_Fighter::Action()
 void C_Fighter::Update()
 {
 	C_Player* player = m_gameScene->GetPlayer();
-	
-
-	for (int e = 0; e < FighterNum; e++)
-	{
-		if (aliveFlg[e])
-		{
-			m_pos[e].x += m_move[e].x;
-			if (m_pos[e].x <= -640 - 32)
-			{
-				m_pos[e].x = 640 + 32;
-			}
-			for (int i = 0; i < player->GetBulletNum(); i++)
-			{
-				if (player->GetBulletFlg(i)==true)
-				{
-					float a = m_pos[e].x - player->GetBulletPos(i).x;
-					float b = m_pos[e].y - player->GetBulletPos(i).y;
-					float c = sqrt(a * a + b * b);
-					if (c < 41)
-					{
-						m_hp[e]--;
-						player->SetBulletFlg(i, false);
-						if (m_hp[e] <= 0)
-						{
-							aliveFlg[e] = false;
-						}
-						break;
-					}
-				}
-			}
-
-		}
-	}
+	Action();
 	for (int e = 0; e < FighterNum; e++)
 	{
 		if (aliveFlg[e])
@@ -135,9 +106,24 @@ void C_Fighter::Update()
 			{
 				Fighterbullet.anim[i] = 0;
 			}
-			Fighterbullet.rect[i] = { 4*(int)Fighterbullet.anim[i],0,4,16};
+			Fighterbullet.rect[i] = { 16*(int)Fighterbullet.anim[i],0,16,4};
 		}
 	}
+	if (rand() % 100 + 1 <= 3)
+	{
+		for (int e = 0; e < FighterNum; e++)
+		{
+			if (aliveFlg[e] == false)
+			{
+				aliveFlg[e] = true;
+				m_hp[e] = m_hpMax;
+				m_pos[e].x = 640 + 64;
+				m_pos[e].y = rand() % 656 + 1 - 328;
+				break;
+			}
+		}
+	}
+
 	for (int e = 0; e < FighterNum; e++)
 	{
 		m_transmat[e] = Math::Matrix::CreateTranslation(m_pos[e].x, m_pos[e].y, 0);
@@ -145,13 +131,82 @@ void C_Fighter::Update()
 		m_scalemat[e] = Math::Matrix::CreateScale(2,2,1);
 		m_mat[e] =m_scalemat[e]*m_rotatemat[e] *m_transmat[e];
 	}
+	
+	
 	for (int i = 0; i < Fighterbullet.Num; i++)
 	{
-		Fighterbullet.transmat[i]= Math::Matrix::CreateTranslation(Fighterbullet.pos[i].x, Fighterbullet.pos[i].y, 0);
-		Fighterbullet.rotatemat[i] = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(90));
-		Fighterbullet.scalemat[i] = Math::Matrix::CreateScale(2, 2, 1);
-		Fighterbullet.mat[i] =Fighterbullet.scalemat[i]* Fighterbullet.rotatemat[i] * Fighterbullet.transmat[i];
+		if (Fighterbullet.Flg[i] == true)
+		{
+				Fighterbullet.transmat[i] = Math::Matrix::CreateTranslation(Fighterbullet.pos[i].x, Fighterbullet.pos[i].y, 0);
+				Fighterbullet.rotatemat[i] = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(Fighterbullet.deg[i]));
+				Fighterbullet.scalemat[i] = Math::Matrix::CreateScale(2, 2, 1);
+				Fighterbullet.mat[i] = Fighterbullet.scalemat[i] * Fighterbullet.rotatemat[i] * Fighterbullet.transmat[i];
+		}
 	}
+	
+}
+
+void C_Fighter::PlayerBulletHit()
+{
+	C_Player* player = m_gameScene->GetPlayer();
+
+
+	for (int e = 0; e < FighterNum; e++)
+	{
+		if (aliveFlg[e])
+		{
+			m_pos[e].x += m_move[e].x;
+			if (m_pos[e].x <= -640 - 32)
+			{
+				m_pos[e].x = 640 + 32;
+			}
+			for (int i = 0; i < player->GetBulletNum(); i++)
+			{
+				if (player->GetBulletFlg(i) == true)
+				{
+					float a = m_pos[e].x - player->GetBulletPos(i).x;
+					float b = m_pos[e].y - player->GetBulletPos(i).y;
+					float c = sqrt(a * a + b * b);
+					if (c < 41)
+					{
+						m_hp[e]--;
+						player->SetBulletFlg(i, false);
+						if (m_hp[e] <= 0)
+						{
+							aliveFlg[e] = false;
+						}
+						break;
+					}
+				}
+			}
+
+		}
+	}
+}
+
+float C_Fighter::GetAngleDeg(float srcX, float srcY, float destX, float destY)
+{
+	float a;
+	float b;
+	float rad;
+	float deg;
+
+	//‰¡•ûŒü‚Ì‹——£a‚Æc•ûŒü‚Ì‹——£b‚ðŒ¸ŽZ‚Å‹‚ß‚é
+	a = destX - srcX;
+	b = destY - srcY;
+
+	//atan2ŠÖ”‚ðŠˆ—p‚µ‚ÄŠp“x‚ð‹‚ß‚é
+	rad = atan2(b, a);
+
+	//ƒfƒBƒOƒŠ[i“xj‚É’¼‚·
+	deg = DirectX::XMConvertToDegrees(rad);
+
+	//•‰‚Ì’l‚ÌŽž‚Í‚R‚U‚O‚ð‘«‚·
+	if (deg < 0)
+	{
+		deg += 360;
+	}
+	return deg;
 }
 
 void C_Fighter::Draw()

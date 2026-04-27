@@ -13,6 +13,7 @@ struct bullet
 	float speed;
 	float rad[Num];
 	float ang[Num];
+	float deg[Num];
 	float anim[Num];
 	Math::Matrix transmat[Num];
 	Math::Matrix scalemat[Num];
@@ -41,5 +42,5 @@ public:
 	int m_hpMax;
 	int m_hp;
 	bool m_aliveFlg;
-
+	const float turnDeg=5.0f;
 };

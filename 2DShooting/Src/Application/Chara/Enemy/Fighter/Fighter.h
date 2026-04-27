@@ -12,6 +12,8 @@ public:
 	void Init();
 	void Action() override;
 	void Update() override;
+	void PlayerBulletHit();
+	float GetAngleDeg(float srcX, float srcY, float destX, float destY);
 	void Draw() override;
 
 	void SetBaseTex(KdTexture* tex) { m_baseTex = tex; }
@@ -19,7 +21,14 @@ public:
 	void SetDestructionTex(KdTexture* tex) { m_DestructionTex = tex; }
 	void SetBulletTex(KdTexture* tex) { m_bulletTex = tex; }
 	void SetShieldTex(KdTexture* tex) { m_ShieldTex = tex; }
-
+	void SetBulletFlg(int i, bool flg) { Fighterbullet.Flg[i] = flg; }
+	Math::Vector2 GetPos(int i) { return m_pos[i]; }
+	int GetHp(int i) { return m_hp[i]; }
+	int GetMaxHp() { return m_hpMax; }
+	int GetNum() { return FighterNum; }
+	int GetBulletNum() { return Fighterbullet.Num; }
+	Math::Vector2 GetBulletPos(int i) { return Fighterbullet.pos[i]; }
+	bool GetBulletFlg(int i) { return Fighterbullet.Flg[i]; }
 
 private:
 	

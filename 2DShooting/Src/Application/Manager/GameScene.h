@@ -2,6 +2,7 @@
 #include"State.h"
 
 class C_Player;
+class C_PlayerHp;
 class C_Back;
 class C_Fighter;
 
@@ -16,6 +17,10 @@ private:
 	KdTexture playerEngineEffectTex;
 	KdTexture playerWeaponTex;
 	KdTexture playerBulletTex;
+	KdTexture playerShieldTex;
+
+	C_PlayerHp* m_playerhp = nullptr;
+	KdTexture playerHpTex;
 
 	C_Back* m_back = nullptr;
 	KdTexture backTex;
@@ -48,4 +53,5 @@ public:
 	void SetNowMap(int a_nowMap) { nowMap = a_nowMap; }
 
 	C_Player* GetPlayer() { return m_player; }
+	C_Fighter* GetFighter() { return m_fighter; }
 };

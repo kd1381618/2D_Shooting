@@ -6,7 +6,7 @@ void C_TitleScene::Init()
 {
 
 	m_titleTex.Load("texture/TitleScene/title.png");
-
+	m_titleMat = Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 }
 void C_TitleScene::ChangeUpdate()
 {
@@ -24,7 +24,7 @@ void C_TitleScene::Update()
 		SCENEMANAGER.ChangeState(new C_GameScene());
 	}
 
-	m_titleMat = Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
+	
 	
 
 

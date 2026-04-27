@@ -189,6 +189,9 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Fighter\Fighter.h">
       <Filter>Src\Application\Chara\Enemy\Fighter</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Player\PlayerHp.h">
+      <Filter>Src\Application\Chara\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -280,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Fighter\Fighter.cpp">
       <Filter>Src\Application\Chara\Enemy\Fighter</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Player\PlayerHp.cpp">
+      <Filter>Src\Application\Chara\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

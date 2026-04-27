@@ -2,13 +2,15 @@
 #include "../Scene.h"
 #include "SceneManager.h"
 #include"../Chara/Player/Player.h"
-#include"../Back/Back.h"]
+#include"../Chara/Player/PlayerHp.h"
+#include"../Back/Back.h"
 #include"../Chara/Enemy/Fighter/Fighter.h"
 
 void C_GameScene::Draw()
 {
 	m_back->Draw();
 	m_player->Draw();
+	m_playerhp->Draw();
 	m_fighter->Draw();
 }
 
@@ -19,9 +21,10 @@ void C_GameScene::Update()
 {
 	m_back->Update();
 	m_player->Update();
-	m_player->Action();
-	m_fighter->Action();
+	m_player->BulletHit();
+	m_playerhp->Update();
 	m_fighter->Update();
+	m_fighter->PlayerBulletHit();
 
 }
 
@@ -34,22 +37,27 @@ void C_GameScene::Init()
 {
 	//player=================================================================================
 	if (m_player == nullptr) m_player = new C_Player;//キャラクラスのインスタンス生成
+	if (m_playerhp == nullptr)m_playerhp = new C_PlayerHp;
 	if (m_back == nullptr)m_back = new C_Back;//背景
 	if (m_fighter == nullptr)m_fighter = new C_Fighter;
 	playerBaseTex.Load("Texture/Player/Base/playerBase.png");
 	playerEngineEffectTex.Load("Texture/Player/Engine Effect/Engine.png");
 	playerWeaponTex.Load("Texture/Player/Weapon/Weapon1.png");
 	playerBulletTex.Load("Texture/Player/Bullet/bullet1.png");
+	playerHpTex.Load("Texture/UI/playerHp.png");
+	playerShieldTex.Load("Texture/Player/Shield/Shield.png");
 	backTex.Load("Texture/Back/back1.png");
 	fighterBaseTex.Load("Texture/Enemy/Base/FighterWeapons.png");
 	fighterEngineTex.Load("Texture/Enemy/Engine/FighterEngine.png");
-	fighterBulletTex.Load("Texture/Enemy/Bullet/Bullet.png");
+	fighterBulletTex.Load("Texture/Enemy/Bullet/Bullet1_transparent.png");
 	fighterDestructionTex.Load("Texture/Enemy/Destruction/FighterDestruction.png");
 	fighterShieldTex.Load("Texture/Enemy/Shield/FighterShield.png");
 	m_player->SetBaseTex(&playerBaseTex);
 	m_player->SetEngineEffectTex(&playerEngineEffectTex);
 	m_player->SetWeaponTex(&playerWeaponTex);
 	m_player->SetBulletTex(&playerBulletTex);
+	m_playerhp->SetTex(&playerHpTex);
+	m_player->SetShieldTex(&playerShieldTex);
 
 	m_back->SetBackTex(&backTex);
 
@@ -63,6 +71,7 @@ void C_GameScene::Init()
 void C_GameScene::Release()
 {
 	if (m_player != nullptr) delete m_player;
+	if (m_playerhp != nullptr) delete m_playerhp;
 	if (m_back != nullptr)delete m_back;
 	if (m_fighter != nullptr)delete m_fighter;
 
@@ -70,6 +79,8 @@ void C_GameScene::Release()
 	playerEngineEffectTex.Release();
 	playerWeaponTex.Release();
 	playerBulletTex.Release();
+	playerHpTex.Release();
+	playerShieldTex.Release();
 	backTex.Release();
 	fighterBaseTex.Release();
 	fighterEngineTex.Release();

@@ -41,8 +41,6 @@ public:
 
 private:
 
-	Scene() {}
-
 public:
 	static Scene& GetInstance()
 	{
