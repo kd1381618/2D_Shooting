@@ -4,7 +4,9 @@
 class C_Player;
 class C_PlayerHp;
 class C_Back;
-class C_Fighter;
+class C_Scout;
+class C_Medkit;
+class C_CharaBase;
 
 
 class C_GameScene : public C_State
@@ -25,15 +27,19 @@ private:
 	C_Back* m_back = nullptr;
 	KdTexture backTex;
 
-	C_Fighter* m_fighter = nullptr;
-	KdTexture fighterBaseTex;
-	KdTexture fighterEngineTex;
-	KdTexture fighterDestructionTex;
-	KdTexture fighterBulletTex;
-	KdTexture fighterShieldTex;
+	C_Scout* m_scout = nullptr;
+	KdTexture scoutBaseTex;
+	KdTexture scoutEngineTex;
+	KdTexture scoutDestructionTex;
+	KdTexture scoutBulletTex;
+	KdTexture scoutShieldTex;
+
+	KdTexture medkitTex;
+	C_Medkit* m_medkit = nullptr;
 
 	int nowMap;//åªç›ÇÃÉ}ÉbÉvî‘çÜ
-
+	std::vector<std::shared_ptr<C_CharaBase>>m_chara;
+	std::vector<C_Scout*>m_scouts;
 
 public:
 
@@ -53,5 +59,6 @@ public:
 	void SetNowMap(int a_nowMap) { nowMap = a_nowMap; }
 
 	C_Player* GetPlayer() { return m_player; }
-	C_Fighter* GetFighter() { return m_fighter; }
+	C_Scout* GetScout() { return m_scout; }
+	C_Medkit* GetMedkit() { return m_medkit; }
 };

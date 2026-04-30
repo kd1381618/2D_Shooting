@@ -1,26 +1,48 @@
 #pragma once
-struct bullet
+struct Bullet
 {
-	static const int Num = 2000;
-	Math::Vector2 pos[Num];
-	Math::Vector2 move[Num];
-	bool Flg[Num];
+	static const int Num = 100;
+	Math::Vector2 pos;
+	Math::Vector2 move;
+	bool Flg;
 	float Angle;
 	int shotCnt;
 	float moveAngle;
 	float shotwait;
 	float radius;
 	float speed;
-	float rad[Num];
-	float ang[Num];
-	float deg[Num];
-	float anim[Num];
-	Math::Matrix transmat[Num];
-	Math::Matrix scalemat[Num];
-	Math::Matrix rotatemat[Num];
-	Math::Matrix mat[Num];
-	Math::Rectangle rect[Num];
+	float rad;
+	float ang;
+	float deg;
+	float anim;
+	Math::Matrix transmat;
+	Math::Matrix scalemat;
+	Math::Matrix rotatemat;
+	Math::Matrix mat;
+	Math::Rectangle rect;
 	Math::Color color;
+	Bullet()
+		: pos{ 0,0 }
+		, move{ 0,0 }
+		, Flg(false)
+		, Angle(0)
+		, shotCnt(0)
+		, moveAngle(0)
+		, shotwait(0)
+		, radius(0)
+		, speed(0)
+		, rad(0)
+		, ang(0)
+		, deg(0)
+		, anim(0)
+		, transmat(Math::Matrix::Identity)
+		, scalemat(Math::Matrix::Identity)
+		, rotatemat(Math::Matrix::Identity)
+		, mat(Math::Matrix::Identity)
+		, rect{ 0,0,0,0 }
+	    , color(1, 1, 1, 1)
+	{
+	}
 };
 class C_CharaBase
 {

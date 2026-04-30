@@ -1,6 +1,7 @@
 #include"Player.h"
 #include"../../Manager/SceneManager.h"
-#include"../Enemy/Fighter/Fighter.h"
+#include"../Enemy/Scout/Scout.h"
+#include"../CharaBase/CharaBase.h"
 
 C_Player::C_Player()
 {
@@ -28,20 +29,19 @@ void C_Player::Init()
 	m_enginerect = { 0,0,48,48 };
 	m_weaponrect = { 0,0,48,48 };
 	m_shieldrect = { 0,0,64,64 };
-	for (int i = 0; i < playerbullet.Num; i++)
-	{
-		playerbullet.pos[i].x = 0;
-		playerbullet.pos[i].y = 0;
-		playerbullet.anim[i] = 0;
-		playerbullet.rect[i] = { 0,0,32,32 };
-		playerbullet.Flg[i] = false;
-	}
+	m_alpha = 1.0f;
+	a_alpha = -0.1f;
+
 }
 
 void C_Player::Action()
 {
 	if (m_aliveFlg)
 	{
+		if (shotwait > 0)
+		{
+			shotwait--;
+		}
 		if (GetAsyncKeyState('A') & 0x8000 || GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
 			m_move.x = -7;
@@ -60,32 +60,22 @@ void C_Player::Action()
 		}
 		if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 		{
-			if (playerbullet.shotwait == 0)
+			if (shotwait == 0)
 			{
-				for (int i = 0; i < playerbullet.Num; i++)
-				{
-					if (playerbullet.Flg[i] == false)
-					{
-						playerbullet.Flg[i] = true;
-						playerbullet.pos[i].x = m_pos.x;
-						playerbullet.pos[i].y = m_pos.y;
-						playerbullet.shotwait = 10;
-						break;
-					}
-				}
+				Bullet b;
+				b.pos = m_pos;
+				b.move = { 10,0 };
+				b.Flg = true;
+				playerbullet.push_back(b);
+				shotwait = shotinterval;
 			}
-			Weaponanim += 0.2f;
 		}
 		else
 		{
 			Weaponanim = 0.0f;
 		}
 		
-		playerbullet.shotwait--;
-		if (playerbullet.shotwait < 0)
-		{
-			playerbullet.shotwait = 0;
-		}
+		
 	}
 }
 
@@ -94,17 +84,18 @@ void C_Player::Update()
 	Action();
 	if (m_aliveFlg)
 	{
-		for (int i = 0; i < playerbullet.Num; i++)
-		{
-			if (playerbullet.Flg[i] == true)
-			{
-				playerbullet.pos[i].x += 15;
-				if (playerbullet.pos[i].y >= 720 + 48)
-				{
-					playerbullet.Flg[i] = false;
-				}
+		for (auto& b : playerbullet) {
+			b.pos += b.move;
+
+
+			if (b.pos.x >640) {
+				b.Flg = false;
 			}
 		}
+		playerbullet.erase(
+			std::remove_if(playerbullet.begin(), playerbullet.end(),
+				[](const Bullet& b) {return !b.Flg; }),
+			playerbullet.end());
 		//‰æ–Ê’[
 		if (m_pos.x >= 604)
 		{
@@ -131,38 +122,38 @@ void C_Player::Update()
 		{
 			Weaponanim = 0.0f;
 		}
-		for (int i = 0; i < playerbullet.Num; i++)
-		{
-			playerbullet.anim[i] += 0.1f;
-			if (playerbullet.anim[i] > 4.0f)
-			{
-				playerbullet.anim[i] = 0.0f;
-			}
-		}
+	
 		m_pos += m_move;
 		m_move = { 0,0 };
-		
+		if (m_hp > 4)
+		{
+			m_hp = 4;
+		}
 		if (m_hp <= 0)
 		{
-			//m_aliveFlg = false;
+			m_aliveFlg = false;
 		}
 		ShieldTime--;
 		if (ShieldTime <= 0)
 		{
 			ShieldTime = 0;
+			m_alpha = 1.0f;
+			a_alpha = -0.1f;
 		}
 		else
 		{
+			m_alpha += a_alpha;
+			if(m_alpha<=0.0f||m_alpha>1.0f)
+			{
+				a_alpha *= -1;
+			}
 			Shieldanim += 0.2f;
 			if (Shieldanim > 12.0f)
 			{
 				Shieldanim = 0;
 			}
 		}
-		for (int i = 0; i < playerbullet.Num; i++)
-		{
-			playerbullet.rect[i] = { 32 * (int)playerbullet.anim[i],0,32,32 };
-		}
+
 		m_enginerect = { 48 * (int)Engineanim,0,48,48 };
 		m_weaponrect = { 48 * (int)Weaponanim,0,48,48 };
 		m_shieldrect = { 64 * (int)Shieldanim,0,64,64 };
@@ -174,30 +165,27 @@ void C_Player::Update()
 	Math::Matrix m_EnginetransMat = Math::Matrix::CreateTranslation(m_pos.x-10, m_pos.y, 0);
 	Math::Matrix m_EnginescaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 	m_EngineEffectMat = m_EnginescaleMat * m_EnginetransMat;
-	for (int i = 0; i < playerbullet.Num; i++)
-	{
-		if (playerbullet.Flg[i] == true)
-		{
-			playerbullet.transmat[i] = Math::Matrix::CreateTranslation(playerbullet.pos[i].x, playerbullet.pos[i].y, 0);
-			playerbullet.scalemat[i] = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
-			playerbullet.mat[i] = playerbullet.scalemat[i] * playerbullet.transmat[i];
-		}
+
+	for (auto& b: playerbullet) {
+		b.transmat = Math::Matrix::CreateTranslation(b.pos.x, b.pos.y, 0);
+		b.scalemat = Math::Matrix::CreateScale(1.5, 1.5, 1);
+		b.mat = b.scalemat * b.transmat;
 	}
 }
 
 void C_Player::BulletHit()
 {
 
-	C_Fighter* fighter = m_gameScene->GetFighter();
+	/*C_Scout* scout = m_gameScene->GetScout();
 
 		if (m_aliveFlg)
 		{
-			for (int i = 0; i < fighter->GetBulletNum(); i++)
+			for (int i = 0; i < scout->GetBulletNum(); i++)
 			{
-				if (fighter->GetBulletFlg(i) == true)
+				if (scout->GetBulletFlg(i) == true)
 				{
-					float a = m_pos.x - fighter->GetBulletPos(i).x;
-					float b = m_pos.y - fighter->GetBulletPos(i).y;
+					float a = m_pos.x - scout->GetBulletPos(i).x;
+					float b = m_pos.y - scout->GetBulletPos(i).y;
 					float c = sqrt(a * a + b * b);
 					if (c < 40)
 					{
@@ -205,7 +193,7 @@ void C_Player::BulletHit()
 						{
 							m_hp--;
 							Baseanim++;
-							fighter->SetBulletFlg(i, false);
+							scout->SetBulletFlg(i, false);
 							ShieldTime = 180;
 							break;
 						}
@@ -213,7 +201,7 @@ void C_Player::BulletHit()
 				}
 			}
 
-		}
+		}*/
 	
 }
 
@@ -222,13 +210,13 @@ void C_Player::Draw()
 	if (m_aliveFlg)
 	{
 		SHADER.m_spriteShader.SetMatrix(m_mat);
-		SHADER.m_spriteShader.DrawTex(m_baseTex, m_rect);
+		SHADER.m_spriteShader.DrawTex(m_baseTex, m_rect,m_alpha);
 
 		SHADER.m_spriteShader.SetMatrix(m_EngineEffectMat);
-		SHADER.m_spriteShader.DrawTex(m_EngineEffectTex,m_enginerect);
+		SHADER.m_spriteShader.DrawTex(m_EngineEffectTex,m_enginerect,m_alpha);
 
 		SHADER.m_spriteShader.SetMatrix(m_mat);
-		SHADER.m_spriteShader.DrawTex(m_WeaponTex, m_weaponrect);
+		SHADER.m_spriteShader.DrawTex(m_WeaponTex, m_weaponrect,m_alpha);
 
 		if (ShieldTime >= 1)
 		{
@@ -238,13 +226,22 @@ void C_Player::Draw()
 				SHADER.m_spriteShader.DrawTex(m_ShieldTex, m_shieldrect);
 			}
 		}
-		for (int i = 0; i < playerbullet.Num; i++)
-		{
-			if (playerbullet.Flg[i] == true)
-			{
-				SHADER.m_spriteShader.SetMatrix(playerbullet.mat[i]);
-				SHADER.m_spriteShader.DrawTex(m_bulletTex, playerbullet.rect[i]);
-			}
+		for (auto& b : playerbullet) {
+			SHADER.m_spriteShader.SetMatrix(b.mat);
+			SHADER.m_spriteShader.DrawTex(m_bulletTex, Math::Rectangle(0, 0, 32, 32));
 		}
+	}
+}
+
+void C_Player::Damage(int amount)
+{
+	if (!m_aliveFlg) return;
+
+	m_hp -= amount;
+
+	if (m_hp <= 0)
+	{
+		m_hp = 0;
+		m_aliveFlg = false;
 	}
 }
