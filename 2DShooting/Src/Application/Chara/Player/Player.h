@@ -7,43 +7,41 @@ class C_Player :public C_CharaBase
 {
 public:
 	C_Player();
-	~C_Player();
+	~C_Player()override;
 
-	void Init();
+	void Init()override;
 	void Action() override;
 	void Update() override;
 	void BulletHit();
 	void Draw() override;
 	void Damage(int amount);
+	void Heal(int heal);
 
-	void SetBaseTex(KdTexture* tex) { m_baseTex = tex; }
-	void SetEngineEffectTex(KdTexture* tex) { m_EngineEffectTex = tex; }
 	void SetWeaponTex(KdTexture* tex) { m_WeaponTex = tex; }
-	void SetBulletTex(KdTexture* tex) { m_bulletTex = tex; }
-	void SetShieldTex(KdTexture* tex) { m_ShieldTex = tex; }
+
 	void SetHp(int hp) { m_hp = hp; }
+	void SetShieldTime(int i) { ShieldTime = i; }
 	Math::Vector2 GetPos() { return m_pos; }
 	int GetHp() { return m_hp; }
 	int GetMaxHp() { return m_hpMax; }
+	int GetShieldTime() { return ShieldTime; }
 	std::vector<Bullet>& GetBullets() { return playerbullet; }
 	bool GetAliveFlg() { return m_aliveFlg; }
 	float GetHitRadius() const { return m_hitRadius; }
-
+	float GetRadius()const { return 36.0f; }
 
 private:
 
 	C_GameScene* m_gameScene;
 
 	std::vector<Bullet>playerbullet;
-	KdTexture *m_baseTex;
-	KdTexture* m_EngineEffectTex;
 	KdTexture* m_WeaponTex;
-	KdTexture* m_bulletTex;
-	KdTexture* m_ShieldTex;
 	Math::Rectangle m_enginerect;
 	Math::Rectangle m_weaponrect;
 	Math::Rectangle m_shieldrect;
 	Math::Matrix m_EngineEffectMat;
+	Math::Matrix m_scaleMat;
+	Math::Matrix m_EnginescaleMat;
 	float Baseanim;
 	float Engineanim;
 	float Weaponanim;
@@ -52,6 +50,6 @@ private:
 	float m_alpha;
 	float a_alpha;
 	int shotwait = 0;
-	int shotinterval = 10;
+	int shotinterval = 20;
 	float m_hitRadius = 20.0f;
 };

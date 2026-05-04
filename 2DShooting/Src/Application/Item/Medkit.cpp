@@ -10,67 +10,66 @@ C_Medkit::C_Medkit()
 
 void C_Medkit::Init()
 {
-	for (int i = 0; i < MedkitNum; i++)
-	{
-		m_pos[i] = { 0,0 };
-		Flg[i] = false;
-		anim[i] = 0;
-		m_rect[i] = {0,0,32,32};
-		m_scale[i] = Math::Matrix::CreateScale(2, 2, 1);
-	}
+	
+	m_pos = { 0,0 };
+	m_alive = true;
+	anim = 0;
+	m_rect = {0,0,32,32};
+	m_scale = Math::Matrix::CreateScale(2, 2, 1);
+	
 }
 
 void C_Medkit::Update()
 {
 	C_Player* player = m_gameScene->GetPlayer();
-	for (int i = 0; i < MedkitNum; i++)
-	{
-		if (Flg[i] == true)
+	
+	if (!m_alive)return;
+
+		m_pos.x -= 5;
+		if (m_pos.x <= -640 - 16)
 		{
-			m_pos[i].x -= 5;
-			if (m_pos[i].x <= -640 - 16)
+			m_alive = false;
+			return;
+		}
+			anim += 0.2f;
+			if (anim > 12.0f)
 			{
-				m_pos[i].x = 640 + 16;
+				anim = 0;
 			}
-			anim[i] += 0.2f;
-			if (anim[i] > 12.0f)
-			{
-				anim[i] = 0;
-			}
-			m_rect[i] = {32 * (int)anim[i],0,32,32};
+			m_rect = {32 * (int)anim,0,32,32};
 			if (player->GetAliveFlg() == true)
 			{
-				float a = player->GetPos().x - m_pos[i].x;
-				float b = player->GetPos().y - m_pos[i].y;
-				float c = sqrt(a * a + b * b);
-				if (c < 36 + 32)
+				float dx = m_pos.x-player->GetPos().x;
+				float dy = m_pos.y-player->GetPos().y;
+				float dist = sqrt(dx * dx + dy * dy);
+				if (dist < GetRadius()+player->GetRadius())
 				{
-					Flg[i] = false;
-					anim[i] = 0;
-					player->SetHp(player->GetHp() + 1);
-					break;
+					player->Heal(1);
+					m_alive = false;
+					anim = 0;
+					return;
+					
 				}
 			}
-		}
-	}
-	for (int i = 0; i < MedkitNum; i++)
+	
+	
+	
+	if (m_alive == true)
 	{
-		if (Flg[i] == true)
-		{
-			m_trans[i] = Math::Matrix::CreateTranslation(m_pos[i].x, m_pos[i].y, 0);
-			m_mat[i] = m_scale[i] * m_trans[i];
-		}
+		m_trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+		m_mat = m_scale * m_trans;
+
 	}
 }
 
 void C_Medkit::Draw()
 {
-	for (int i = 0; i < MedkitNum; i++)
+	
+	
+	if (m_alive == true)
 	{
-		if (Flg[i] == true)
-		{
-			SHADER.m_spriteShader.SetMatrix(m_mat[i]);
-			SHADER.m_spriteShader.DrawTex(m_tex, m_rect[i]);
-		}
+		SHADER.m_spriteShader.SetMatrix(m_mat);
+		SHADER.m_spriteShader.DrawTex(m_tex, m_rect);
 	}
+	
 }

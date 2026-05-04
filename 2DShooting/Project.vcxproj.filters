@@ -67,6 +67,9 @@
     <Filter Include="Src\Application\Chara\Enemy\Scout">
       <UniqueIdentifier>{60eace56-c089-4eb9-8894-2be258fd680b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\Fighter">
+      <UniqueIdentifier>{160f7f7d-0e04-4fcc-a6dd-1aa78e3b61f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -198,6 +201,12 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Scout\Scout.h">
       <Filter>Src\Application\Chara\Enemy\Scout</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Item\ItemBase.h">
+      <Filter>Src\Application\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Fighter\Fighter.h">
+      <Filter>Src\Application\Chara\Enemy\Fighter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -295,6 +304,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Scout\Scout.cpp">
       <Filter>Src\Application\Chara\Enemy\Scout</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Item\ItemBase.cpp">
+      <Filter>Src\Application\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Fighter\Fighter.cpp">
+      <Filter>Src\Application\Chara\Enemy\Fighter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

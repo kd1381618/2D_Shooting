@@ -19,7 +19,6 @@ void C_Player::Init()
 	m_hp = m_hpMax;
 	m_pos = { -500,0 };
 	m_move = { 0,0 };
-	m_scale = { 1.5,1.5 };
 	m_aliveFlg = true;
 	m_rect = { 0,0,48,48 };
 	Engineanim = 0;
@@ -31,7 +30,8 @@ void C_Player::Init()
 	m_shieldrect = { 0,0,64,64 };
 	m_alpha = 1.0f;
 	a_alpha = -0.1f;
-
+	m_scaleMat = Math::Matrix::CreateScale(1.5,1.5,1);
+	m_EnginescaleMat = Math::Matrix::CreateScale(1.5,1.5, 1);
 }
 
 void C_Player::Action()
@@ -160,10 +160,8 @@ void C_Player::Update()
 		m_rect = { 48 * (int)Baseanim,0,48,48 };
 	}
 	Math::Matrix m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y,0);
-	Math::Matrix m_scaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y,1);
 	m_mat = m_scaleMat*m_transMat;
 	Math::Matrix m_EnginetransMat = Math::Matrix::CreateTranslation(m_pos.x-10, m_pos.y, 0);
-	Math::Matrix m_EnginescaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 	m_EngineEffectMat = m_EnginescaleMat * m_EnginetransMat;
 
 	for (auto& b: playerbullet) {
@@ -213,7 +211,7 @@ void C_Player::Draw()
 		SHADER.m_spriteShader.DrawTex(m_baseTex, m_rect,m_alpha);
 
 		SHADER.m_spriteShader.SetMatrix(m_EngineEffectMat);
-		SHADER.m_spriteShader.DrawTex(m_EngineEffectTex,m_enginerect,m_alpha);
+		SHADER.m_spriteShader.DrawTex(m_EngineTex,m_enginerect,m_alpha);
 
 		SHADER.m_spriteShader.SetMatrix(m_mat);
 		SHADER.m_spriteShader.DrawTex(m_WeaponTex, m_weaponrect,m_alpha);
@@ -243,5 +241,16 @@ void C_Player::Damage(int amount)
 	{
 		m_hp = 0;
 		m_aliveFlg = false;
+	}
+}
+
+void C_Player::Heal(int heal)
+{
+	if (!m_aliveFlg)return;
+
+	m_hp += heal;
+	if (m_hp >= 4)
+	{
+		m_hp = 4;
 	}
 }

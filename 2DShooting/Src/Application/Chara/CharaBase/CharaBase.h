@@ -48,19 +48,43 @@ class C_CharaBase
 {
 public:
 	C_CharaBase() {}
-	~C_CharaBase(){}
+	virtual~C_CharaBase(){}
 
+	virtual void Init() = 0;
 	virtual void Action() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	void SetBaseTex(KdTexture* tex) { m_baseTex = tex; }
+	void SetEngineTex(KdTexture* tex) { m_EngineTex = tex; }
+	void SetDestructionTex(KdTexture* tex) { m_DestructionTex = tex; }
+	void SetBulletTex(KdTexture* tex) { m_bulletTex = tex; }
+	void SetShieldTex(KdTexture* tex) { m_ShieldTex = tex; }
+
 	protected:
 	KdTexture* m_tex;
-	Math::Vector2 m_scale;
+	KdTexture* m_baseTex;
+	KdTexture* m_EngineTex;
+	KdTexture* m_DestructionTex;
+	KdTexture* m_bulletTex;
+	KdTexture* m_ShieldTex;
+	Math::Matrix m_scale;
 	Math::Matrix m_mat;
+	Math::Matrix m_transmat;
+	Math::Matrix m_scalemat;
+	Math::Matrix m_rotatemat;
 	Math::Vector2 m_pos;
 	Math::Vector2 m_move;
 	Math::Rectangle m_rect;
+	Math::Rectangle m_Shieldrect;
+	Math::Rectangle m_destructionrect;
+	Math::Rectangle m_bulletrect;
+	Math::Rectangle m_enginerect;
+	float Weaponanim;
+	float Engineanim;
+	float Shieldanim;
+	float destructionAnim;
+	float bulletAnim;
 	int m_hpMax;
 	int m_hp;
 	bool m_aliveFlg;
