@@ -51,5 +51,5 @@ private:
 	float a_alpha;
 	int shotwait = 0;
 	int shotinterval = 20;
-	float m_hitRadius = 20.0f;
+	float m_hitRadius = 15.0f;
 };

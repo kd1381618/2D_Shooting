@@ -15,7 +15,7 @@ void C_Medkit::Init()
 	m_alive = true;
 	anim = 0;
 	m_rect = {0,0,32,32};
-	m_scale = Math::Matrix::CreateScale(2, 2, 1);
+	m_scale = Math::Matrix::CreateScale(3, 3, 1);
 	
 }
 
@@ -65,7 +65,7 @@ void C_Medkit::Update()
 void C_Medkit::Draw()
 {
 	
-	
+	Math::Color color = { 0, 1, 0, 1};
 	if (m_alive == true)
 	{
 		SHADER.m_spriteShader.SetMatrix(m_mat);

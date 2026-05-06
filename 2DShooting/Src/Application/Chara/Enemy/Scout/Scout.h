@@ -16,13 +16,15 @@ public:
 	void PlayerBulletHit();
 	void Draw() override;
 	void Damage(int amount);
-
+	bool GetDestructionFlg() { return destructionFlg; }
 	//void SetBulletFlg(int i, bool flg) { Scoutbullet.Flg = flg; }
 	int GetMaxHp() { return m_hpMax; }
 	//int GetBulletNum() { return Scoutbullet.Num; }
 	//Math::Vector2 GetBulletPos(int i) { return Scoutbullet.pos; }
 	//bool GetBulletFlg(int i) { return Scoutbullet.Flg; }
-
+	bool C_Scout::HasBullet() const {
+		return !scoutbullet.empty();
+	}
 private:
 	
 	C_GameScene* m_gameScene;

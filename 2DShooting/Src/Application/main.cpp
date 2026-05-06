@@ -175,7 +175,7 @@ void Application::Execute()
 		m_window.ProcessMessage();
 
 		// ウィンドウが破棄されてるならループ終了
-		if (m_window.IsCreated() == false)
+ 		if (m_window.IsCreated() == false)
 		{
 			break;
 		}

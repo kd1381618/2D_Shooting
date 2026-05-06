@@ -30,6 +30,7 @@ void C_Player::Init()
 	m_shieldrect = { 0,0,64,64 };
 	m_alpha = 1.0f;
 	a_alpha = -0.1f;
+	m_radius = 36.0f;
 	m_scaleMat = Math::Matrix::CreateScale(1.5,1.5,1);
 	m_EnginescaleMat = Math::Matrix::CreateScale(1.5,1.5, 1);
 }
@@ -57,6 +58,11 @@ void C_Player::Action()
 		if (GetAsyncKeyState('W') & 0x8000 || GetAsyncKeyState(VK_UP) & 0x8000)
 		{
 			m_move.y = 7;
+		}
+		if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+		{
+			m_move.x *= 0.5;
+			m_move.y *= 0.5;
 		}
 		if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 		{
@@ -109,9 +115,9 @@ void C_Player::Update()
 		{
 			m_pos.y = 324;
 		}
-		if (m_pos.y <= -324)
+		if (m_pos.y <= -324+65)
 		{
-			m_pos.y = -324;
+			m_pos.y = -324+65;
 		}
 		Engineanim += 0.1f;
 		if (Engineanim > 4.0f)

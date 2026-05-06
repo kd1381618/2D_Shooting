@@ -70,6 +70,18 @@
     <Filter Include="Src\Application\Chara\Enemy\Fighter">
       <UniqueIdentifier>{160f7f7d-0e04-4fcc-a6dd-1aa78e3b61f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\UI">
+      <UniqueIdentifier>{f4685d01-368a-4f9d-a7a6-e26e794e3485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\UI\Score">
+      <UniqueIdentifier>{a906e63e-a7ea-4ae0-82ed-ad1c1e2244fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\EnemySpawner">
+      <UniqueIdentifier>{4ac8e1af-7e87-4cd8-aa7a-7a680bb089b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\Battlecruiser">
+      <UniqueIdentifier>{74ddc500-d4d0-47aa-ad1b-5e9795c33702}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -207,6 +219,15 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Fighter\Fighter.h">
       <Filter>Src\Application\Chara\Enemy\Fighter</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\UI\Score\Score.h">
+      <Filter>Src\Application\UI\Score</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\EnemySpawner\EnemySpawner.h">
+      <Filter>Src\Application\Chara\Enemy\EnemySpawner</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.h">
+      <Filter>Src\Application\Chara\Enemy\Battlecruiser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -310,6 +331,15 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Fighter\Fighter.cpp">
       <Filter>Src\Application\Chara\Enemy\Fighter</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\Score\Score.cpp">
+      <Filter>Src\Application\UI\Score</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\EnemySpawner\EnemySpawner.cpp">
+      <Filter>Src\Application\Chara\Enemy\EnemySpawner</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.cpp">
+      <Filter>Src\Application\Chara\Enemy\Battlecruiser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

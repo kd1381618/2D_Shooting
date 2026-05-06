@@ -1,12 +1,12 @@
 #include "Scout.h"
 #include"../../../Manager/SceneManager.h"
 #include"../../../Chara/Player/Player.h"
+#include"../../../UI/Score/Score.h"
 #include"../../../Item/Medkit.h"
 
 C_Scout::C_Scout()
 {
 	m_gameScene = static_cast<C_GameScene*>(SCENEMANAGER.GetCurrentState());
-	Init();
 }
 
 C_Scout::~C_Scout()
@@ -19,9 +19,14 @@ void C_Scout::Init()
 	m_hpMax = 1;
 	m_hp = m_hpMax;
 
-	m_aliveFlg = false;
+	
+	m_aliveFlg = true;
 
-	m_pos = { 640 + 64, float(rand() % 656 - 328) };
+	
+	destructionFlg = false;
+
+	// m_pos = { 640 + 64, float(rand() % 656 - 328) };
+
 	m_move = { -3, 0 };
 
 	Weaponanim = 0;
@@ -29,16 +34,14 @@ void C_Scout::Init()
 	destructionAnim = 0;
 	Engineanim = 0;
 
-	ShieldTime = 0;
-	frame = rand() % 200 + 50;
-	destructionFlg = false;
-
 	m_rect = { 0,0,64,64 };
 	m_Shieldrect = { 0,0,64,64 };
 	m_destructionrect = { 0,0,64,64 };
 	m_enginerect = { 0,0,64,64 };
-	respawnTimer = rand() % 180 + 120;
-	
+
+	respawnTimer = 0;
+
+	m_radius = 64.0f;
 	m_scalemat = Math::Matrix::CreateScale(2, 2, 1);
 }
 
@@ -60,7 +63,7 @@ void C_Scout::Action()
 		b.pos = m_pos;
 		Math::Vector2 dir = player->GetPos() - m_pos;
 		dir.Normalize();
-		b.move = dir * 6.0f;
+		b.move = dir * 5.0f;
 		b.anim = 0;
 		b.deg = DirectX::XMConvertToDegrees(atan2(dir.y, dir.x));
 		b.Flg = true;
@@ -80,7 +83,7 @@ void C_Scout::Update()
 		b.anim += 0.2f;
 		if (b.anim > 4.0)b.anim = 0;
 		b.rect = { 16 * (int)b.anim,0,16,4 };
-		if (b.pos.x < -700) b.Flg = false;
+		if (b.pos.x < -700||b.pos.x>700||b.pos.y<-360||b.pos.y>400) b.Flg = false;
 	}
 
 	scoutbullet.erase(
@@ -95,30 +98,36 @@ void C_Scout::Update()
 		b.scalemat = Math::Matrix::CreateScale(2, 2, 1);
 		b.mat = b.scalemat * b.rotatemat * b.transmat;
 	}
-	if (!m_aliveFlg && !destructionFlg)
-	{
-		if (respawnTimer > 0)
-		{
-			respawnTimer--;
-			return;
-		}
-		else
-		{
-			m_aliveFlg = true;
-			m_hp = m_hpMax;
+	//if (!m_aliveFlg && !destructionFlg)
+	//{
+	//	if (respawnTimer > 0)
+	//	{
+	//		respawnTimer--;
+	//		return;
+	//	}
+	//	else
+	//	{
+	//		m_aliveFlg = true;
+	//		m_hp = m_hpMax;
 
-			// ランダム位置に再出現
-			m_pos.x = 640 + 64;
-			m_pos.y = (rand() % 656 - 328);
+	//		//// ランダム位置に再出現
+	//		//m_pos.x = 640 + 64;
+	//		//m_pos.y = (-296 + 65) + (rand() % 296 - (-296 + 65));
+	//		float spawnMinY = -360 + 65+64; // UI を除外
+	//		float spawnMaxY = 360-64;
 
-			ShieldTime = 0;
-			Shieldanim = 0;
-			Weaponanim = 0;
+	//		float y = spawnMinY + (rand() % (int)(spawnMaxY - spawnMinY));
+	//		float x = 700; // 画面右外
+	//		m_pos = { x,y };
 
-			frame = rand() % 200 + 50;
-		}
+	//		ShieldTime = 0;
+	//		Shieldanim = 0;
+	//		Weaponanim = 0;
 
-	}
+	//		frame = rand() % 200 + 50;
+	//	}
+
+	//}
 	
 	if (!m_aliveFlg)
 	{
@@ -158,25 +167,6 @@ void C_Scout::Update()
 	Engineanim += 0.2f;
 	if (Engineanim > 10.0f)Engineanim = 0;
 	m_enginerect = { 0, 64 * (int)Engineanim, 64, 64 };
-	// シールド
-	
-	if (frame <= 0)
-	{
-		frame = rand() % 200 + 50;
-		ShieldTime = 120;
-	}
-
-	if (ShieldTime > 0)
-	{
-		ShieldTime--;
-		Shieldanim += 0.2f;
-		if (Shieldanim > 14.0f) Shieldanim = 0;
-		m_Shieldrect = { 0,64 * (int)Shieldanim, 64, 64 };
-	}
-	else
-	{
-		frame--;
-	}
 
 	
 	float x = player->GetPos().x - m_pos.x;
@@ -222,6 +212,7 @@ void C_Scout::PlayerBulletHit()
 	if (!m_aliveFlg) return;
 
 	C_Player* player = m_gameScene->GetPlayer();
+	C_Score* score = m_gameScene->GetScore();
 	auto& bullets = player->GetBullets(); 
 
 	for (auto& b : bullets)
@@ -237,10 +228,9 @@ void C_Scout::PlayerBulletHit()
 		if (dist < 40)
 		{
 			b.Flg = false;
-			if (ShieldTime <= 0)
-			{
-				m_hp--;
-			}
+			
+			m_hp--;
+			
 			if (m_hp <= 0)
 			{
 				m_hp = 0;
@@ -248,11 +238,12 @@ void C_Scout::PlayerBulletHit()
 				destructionFlg = true;  
 				destructionAnim = 0;
 				int r = rand() % 100;
-				if (r < 20)
+				if (r < 10)
 				{
 					m_gameScene->SpawnMedkit(m_pos);
 				}
 				respawnTimer = rand() % 180 + 120;
+				score->Add(100);
 			}
 
 			break;
@@ -284,11 +275,6 @@ void C_Scout::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(m_EngineTex, m_enginerect);
 
-	if (ShieldTime > 0)
-	{
-		SHADER.m_spriteShader.SetMatrix(m_mat);
-		SHADER.m_spriteShader.DrawTex(m_ShieldTex, m_Shieldrect);
-	}
 
 	
 }

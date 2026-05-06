@@ -60,6 +60,9 @@ public:
 	void SetDestructionTex(KdTexture* tex) { m_DestructionTex = tex; }
 	void SetBulletTex(KdTexture* tex) { m_bulletTex = tex; }
 	void SetShieldTex(KdTexture* tex) { m_ShieldTex = tex; }
+	void SetPos(Math::Vector2 pos) { m_pos = pos; }
+	float GetRadius() { return m_radius; }
+	bool GetAlive() { return m_aliveFlg; }
 
 	protected:
 	KdTexture* m_tex;
@@ -88,5 +91,7 @@ public:
 	int m_hpMax;
 	int m_hp;
 	bool m_aliveFlg;
+	bool destructionFlg;
 	const float turnDeg=5.0f;
+	float m_radius;
 };

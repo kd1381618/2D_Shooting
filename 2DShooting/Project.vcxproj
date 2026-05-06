@@ -161,6 +161,8 @@
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\Back\Back.h" />
     <ClInclude Include="Src\Application\Chara\CharaBase\CharaBase.h" />
+    <ClInclude Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.h" />
+    <ClInclude Include="Src\Application\Chara\Enemy\EnemySpawner\EnemySpawner.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Fighter\Fighter.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Scout\Scout.h" />
     <ClInclude Include="Src\Application\Chara\Player\Player.h" />
@@ -175,6 +177,7 @@
     <ClInclude Include="Src\Application\Manager\TitleScene.h" />
     <ClInclude Include="Src\Application\Scene.h" />
     <ClInclude Include="Src\Application\main.h" />
+    <ClInclude Include="Src\Application\UI\Score\Score.h" />
     <ClInclude Include="Src\System\Audio\KdAudio.h" />
     <ClInclude Include="src\System\Direct3D\KdDirect3D.h" />
     <ClInclude Include="Src\System\Direct3D\KdDirect3DHelper.h" />
@@ -200,6 +203,8 @@
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Back\Back.cpp" />
     <ClCompile Include="Src\Application\Chara\CharaBase\CharaBase.cpp" />
+    <ClCompile Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.cpp" />
+    <ClCompile Include="Src\Application\Chara\Enemy\EnemySpawner\EnemySpawner.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Fighter\Fighter.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Scout\Scout.cpp" />
     <ClCompile Include="Src\Application\Chara\Player\Player.cpp" />
@@ -213,6 +218,7 @@
     <ClCompile Include="Src\Application\Manager\TitleScene.cpp" />
     <ClCompile Include="Src\Application\Scene.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
+    <ClCompile Include="Src\Application\UI\Score\Score.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />
     <ClCompile Include="src\System\Direct3D\KdDirect3D.cpp" />
     <ClCompile Include="Src\System\Direct3D\KdDirect3DHelper.cpp" />

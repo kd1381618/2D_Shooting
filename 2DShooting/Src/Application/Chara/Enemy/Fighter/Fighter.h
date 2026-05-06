@@ -13,7 +13,10 @@ public:
     void FighterBulletHit();
     void PlayerBulletHit();
     void Draw() override;
-
+    bool GetDestructionFlg() { return destructionFlg; }
+    bool C_Fighter::HasBullet() const {
+        return !m_bullet.empty();
+    }
 
 private:
     C_GameScene* m_gameScene = nullptr;
