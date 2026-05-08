@@ -17,13 +17,32 @@ public:
 
 private:
 
+
 	float m_alpha;
 	float m_gradation;
 
 	KdTexture m_titleTex;
+	Math::Vector2 m_pos;
+	Math::Rectangle m_rect;
 	Math::Matrix m_titleMat;
+	Math::Matrix m_titleMat2;
 
-	KdTexture m_pressEnterTex;
-	Math::Matrix m_pressEnterMat;
+	KdTexture m_startTex;
+	Math::Matrix m_startMat;
+	Math::Vector2 m_startscale;
+	Math::Rectangle m_startrect;
+
+	KdTexture m_guideTex;
+	Math::Matrix m_guideMat;
+	Math::Vector2 m_guidescale;
+	Math::Rectangle m_guiderect;
+
+	KdTexture m_exitTex;
+	Math::Matrix m_exitMat;
+	Math::Vector2 m_exitscale;
+	Math::Rectangle m_exitrect;
+
+	bool keyFlg;
+	int SelectNum=0;
 
 };

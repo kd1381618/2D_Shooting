@@ -82,6 +82,9 @@
     <Filter Include="Src\Application\Chara\Enemy\Battlecruiser">
       <UniqueIdentifier>{74ddc500-d4d0-47aa-ad1b-5e9795c33702}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Chara\BulletUpdate">
+      <UniqueIdentifier>{89704373-7f34-41ab-ac40-e80c16926eb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.h">
       <Filter>Src\Application\Chara\Enemy\Battlecruiser</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Chara\BulletUpdate\BulletUpdate.h">
+      <Filter>Src\Application\Chara\BulletUpdate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -340,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.cpp">
       <Filter>Src\Application\Chara\Enemy\Battlecruiser</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\BulletUpdate\BulletUpdate.cpp">
+      <Filter>Src\Application\Chara\BulletUpdate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

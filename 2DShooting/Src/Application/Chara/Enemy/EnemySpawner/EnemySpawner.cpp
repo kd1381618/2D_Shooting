@@ -41,14 +41,14 @@ void C_EnemySpawner::SpawnEnemyByTime()
         return;
     }
 
-    // ★ Scout が上限なら Fighter だけ出す
+    // Scout が上限なら Fighter だけ出す
     if (m_scoutList->size() >= m_maxScout)
     {
         SpawnFighter();
         return;
     }
 
-    // ★ Fighter が上限なら Scout だけ出す
+    // Fighter が上限なら Scout だけ出す
     if (m_fighterList->size() >= m_maxFighter)
     {
         SpawnScout();
@@ -68,7 +68,7 @@ void C_EnemySpawner::SpawnEnemyByTime()
     }
     else
     {
-        if (rand() % 100 < 40) SpawnScout();
+        if (rand() % 100 < 50) SpawnScout();
         else SpawnFighter();
     }
 }

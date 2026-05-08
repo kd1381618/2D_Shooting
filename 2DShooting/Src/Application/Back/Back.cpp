@@ -4,6 +4,7 @@ C_Back::C_Back()
 {
 	m_pos={ 0,0 };
 	m_rect = { 0,0,1280,720 };
+	anim = 0;
 }
 
 C_Back::~C_Back()
@@ -23,7 +24,12 @@ void C_Back::Update()
 	{
 		m_pos.x = 0;
 	}
-
+	if (anim > 9)anim = 0;
+	else
+	{
+		anim += 0.25;
+	}
+	m_rect = { 1280 * (int)anim,0,1280,720 };
 	Math::Matrix transmat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = transmat;
 	Math::Matrix transmat2= Math::Matrix::CreateTranslation(m_pos.x+1280, 0, 0);

@@ -50,6 +50,6 @@ private:
 	float m_alpha;
 	float a_alpha;
 	int shotwait = 0;
-	int shotinterval = 20;
+	static const int shotinterval = 20;
 	float m_hitRadius = 15.0f;
 };

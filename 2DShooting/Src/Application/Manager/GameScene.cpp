@@ -33,6 +33,9 @@ void C_GameScene::Draw()
 	}
 	m_playerhp->Draw();
 	m_score->Draw();
+
+	SHADER.m_spriteShader.SetMatrix(m_feadoutMat);
+	SHADER.m_spriteShader.DrawTex(&feadoutTex, Math::Rectangle{ 0,0,1280,720 }, feadoutAlpha);
 }
 
 
@@ -42,22 +45,27 @@ void C_GameScene::Update()
 {
 	m_back->Update();
 	m_player->Update();
-	if (!m_midBossAppeared && time > 3.0f)
+	if (!m_midBossAppeared && time > 1.0f)
 	{
 		m_midBoss = new C_Battlecruiser();
 		m_midBoss->Init();
 		m_midBossAppeared = true;
 		m_midBoss->SetBaseTex(&midBossBaseTex);
+		m_midBoss->SetDestructionTex(&midBossDestructionTex);
+		m_midBoss->SetBulletTex(&midBossBulletTex);
+		m_midBoss->SetHpBarTex(&midBossHpBarTex);
+		m_midBoss->SetHpFrameTex(&midBossHpframeTex);
 
-		// ★ 中ボス出現中は雑魚スポーン停止
+		// 中ボス出現中は雑魚スポーン停止
 		m_spawner->StopSpawn(true);
 	}
 	if (m_midBossAppeared && !m_midBossDefeated)
 	{
 		m_midBoss->Update();
 		m_midBoss->PlayerBulletHit();
+		m_midBoss->BossBulletHit();
 
-		if (m_midBoss->IsDead())
+		if (m_midBoss->IsDead()&&!m_midBoss->GetDestructionFlg())
 		{
 			m_midBossDefeated = true;
 			// 雑魚スポーン再開
@@ -66,7 +74,6 @@ void C_GameScene::Update()
 	}
 	if (!m_midBossAppeared || m_midBossDefeated)
 	{
-		//先にスポーンさせる
 		m_spawner->Update();
 	}
 
@@ -115,11 +122,30 @@ void C_GameScene::Update()
 	else {
 		frame++;
 	}
+	if (feadoutFlg)
+	{
+		feadoutAlpha += 0.01;
+	}
+	if (!m_player->GetAlive())
+	{
+		feadoutFlg = true;
+		stopFlg = true;
+	}
+	if (feadoutAlpha >= 1.3)
+	{
+		stopFlg = false;
+		feadoutFlg = false;
+		feadoutAlpha = 0;
+		SCENEMANAGER.ChangeState(new C_GameOverScene());
+		return;
+	}
+	m_feadoutMat = Math::Matrix::CreateTranslation(m_feadoutPos.x, m_feadoutPos.y, 0);
 }
 
 void C_GameScene::ChangeUpdate()
 {
 
+	
 }
 
 void C_GameScene::Init()
@@ -157,6 +183,12 @@ void C_GameScene::Init()
 	scoreTex.Load("Texture/UI/GameScene/Score.png");
 	numTex.Load("Texture/UI/GameScene/num.png");
 	midBossBaseTex.Load("Texture/Enemy/Base/BattlecruiserBase.png");
+	midBossDestructionTex.Load("Texture/Enemy/Destruction/BattlecruiserDestruction.png");
+	midBossBulletTex.Load("Texture/Enemy/Bullet/SpinningBullet.png");
+	midBossHpBarTex.Load("Texture/UI/GameScene/hpbar1.png");
+	midBossHpframeTex.Load("Texture/UI/GameScene/hpframe1.png");
+	feadoutTex.Load("Texture/Back/feadout.png");
+
 
 	m_spawner->SetScoutBaseTex(&scoutBaseTex);
 	m_spawner->SetScoutEngineTex(&scoutEngineTex);
@@ -188,6 +220,9 @@ void C_GameScene::Init()
 	m_score->Init();
 
 	m_back->SetBackTex(&backTex);
+
+	feadoutFlg = false;
+	stopFlg = false;
 	//for (int i = 0; i < 5; i++)
 	//{
 	//	C_Scout* s = new C_Scout();
@@ -257,6 +292,11 @@ void C_GameScene::Release()
 	scoreTex.Release();
 	numTex.Release();
 	midBossBaseTex.Release();
+	midBossDestructionTex.Release();
+	midBossBulletTex.Release();
+	midBossHpBarTex.Release();
+	midBossHpframeTex.Release();
+	feadoutTex.Release();
 }
 
 void C_GameScene::SpawnMedkit(const Math::Vector2& pos)

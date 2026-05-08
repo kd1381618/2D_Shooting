@@ -18,5 +18,6 @@ private:
 	Math::Matrix m_mat;
 	Math::Matrix m_mat2;
 	Math::Rectangle m_rect;
+	float anim;
 };
 

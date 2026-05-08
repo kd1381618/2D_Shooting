@@ -4,7 +4,7 @@ class C_Score
 {
 public:
    
-    C_Score() { Init(); }
+    C_Score() {}
     ~C_Score(){}
 
     void Init();
@@ -13,6 +13,7 @@ public:
     void Draw();
     void SetTex(KdTexture* tex) { m_tex = tex; }
     void SetScoreTex(KdTexture* tex) { m_scoreTex = tex; }
+    unsigned long GetScore() { return m_score; }
 
 private:
     unsigned long m_score = 0;

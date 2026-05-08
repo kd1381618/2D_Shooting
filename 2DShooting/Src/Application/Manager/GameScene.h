@@ -34,6 +34,7 @@ private:
 
 	C_Score* m_score = nullptr;
 	KdTexture scoreTex;
+	Math::Vector2 scorepos;
 	KdTexture numTex;
 
 	std::vector<C_Scout*>m_scout;
@@ -52,6 +53,10 @@ private:
 
 	C_Battlecruiser* m_midBoss = nullptr;
 	KdTexture midBossBaseTex;
+	KdTexture midBossDestructionTex;
+	KdTexture midBossBulletTex;
+	KdTexture midBossHpBarTex;
+	KdTexture midBossHpframeTex;
 	bool m_midBossAppeared = false;
 	bool m_midBossDefeated = false;
 
@@ -63,6 +68,13 @@ private:
 	
 	float frame;
 	float time;
+
+	bool stopFlg = false;
+	bool feadoutFlg = false;
+	float feadoutAlpha = 0;
+	Math::Vector2 m_feadoutPos = { 0,0 };
+	Math::Matrix m_feadoutMat;
+	KdTexture feadoutTex;
 
 
 public:

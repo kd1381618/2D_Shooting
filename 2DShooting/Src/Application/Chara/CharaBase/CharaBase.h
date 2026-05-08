@@ -21,6 +21,21 @@ struct Bullet
 	Math::Matrix mat;
 	Math::Rectangle rect;
 	Math::Color color;
+	int timer;
+	// Žû‘©’e—p
+	bool converge;
+	Math::Vector2 target;
+
+	// •ª—ô’e—p
+	bool split;
+	int splitTimer;
+
+
+	enum BulletType {
+		Converge,
+		Split,
+		Mine,
+	}type;
 	Bullet()
 		: pos{ 0,0 }
 		, move{ 0,0 }
@@ -41,8 +56,14 @@ struct Bullet
 		, mat(Math::Matrix::Identity)
 		, rect{ 0,0,0,0 }
 	    , color(1, 1, 1, 1)
+		, timer(0)
+		, converge(false)
+		, split(false)
+		, splitTimer(0)
+		, type(Converge)
 	{
 	}
+	
 };
 class C_CharaBase
 {
@@ -94,4 +115,5 @@ public:
 	bool destructionFlg;
 	const float turnDeg=5.0f;
 	float m_radius;
+	
 };

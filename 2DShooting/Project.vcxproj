@@ -160,6 +160,7 @@
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\Back\Back.h" />
+    <ClInclude Include="Src\Application\Chara\BulletUpdate\BulletUpdate.h" />
     <ClInclude Include="Src\Application\Chara\CharaBase\CharaBase.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\EnemySpawner\EnemySpawner.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="..\Library\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Back\Back.cpp" />
+    <ClCompile Include="Src\Application\Chara\BulletUpdate\BulletUpdate.cpp" />
     <ClCompile Include="Src\Application\Chara\CharaBase\CharaBase.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Battlecruiser\Battlecruiser.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\EnemySpawner\EnemySpawner.cpp" />
