@@ -1,5 +1,5 @@
 #include "main.h"
-
+#include"Src/Application/Manager/SceneManager.h"
 #include "Scene.h"
 
 //===================================================================
@@ -18,6 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpszArgs, int
 	// 実行
 	//===================================================================
 	APP.Execute();
+	
 
 	// COM解放
 	CoUninitialize();
@@ -164,7 +165,10 @@ void Application::Execute()
 		{ 
 			break;
 		}
-
+		if (SCENEMANAGER.m_exit)
+		{
+			break;
+		}
 		//=========================================
 		//
 		// ウィンドウ関係の処理

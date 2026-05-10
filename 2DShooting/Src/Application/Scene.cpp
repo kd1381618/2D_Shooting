@@ -14,11 +14,20 @@ void Scene::Draw2D()
 
 void Scene::Update()
 {
+	
 
 	SCENEMANAGER.Update();
 
+	SCENEMANAGER.ChangeUpdate();
 
-
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+	{
+		m_enterFlg = true;
+	}
+	else
+	{
+		m_enterFlg = false;
+	}
 	
 }
 

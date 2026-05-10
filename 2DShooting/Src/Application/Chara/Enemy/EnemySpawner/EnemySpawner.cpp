@@ -1,6 +1,7 @@
 #include "EnemySpawner.h"
 #include"../Scout/Scout.h"
 #include"../Fighter/Fighter.h"
+#include"../Frigate/Frigate.h"
 
 C_EnemySpawner::C_EnemySpawner()
 {
@@ -22,7 +23,7 @@ void C_EnemySpawner::Update()
 
     // 難易度カーブ付きスポーン間隔
     float spawnInterval = 120 - elapsedSec * 1.0f;  
-    if (spawnInterval < 60) spawnInterval = 60;     
+    if (spawnInterval < 80) spawnInterval = 80;     
 
     // スポーン処理
     if (m_frame >= spawnInterval)
@@ -36,11 +37,22 @@ void C_EnemySpawner::SpawnEnemyByTime()
 {
     if (m_stopSpawn) return;
     if (m_scoutList->size() >= m_maxScout &&
-        m_fighterList->size() >= m_maxFighter)
+        m_fighterList->size() >= m_maxFighter&&
+        m_frigateList->size()>=m_maxFrigate)
     {
         return;
     }
-
+    if (m_frigateList->size() >= m_maxFrigate)
+    {
+        SpawnFighter();
+        return;
+    }
+    // Fighter が上限なら Scout だけ出す
+    if (m_fighterList->size() >= m_maxFighter)
+    {
+        SpawnScout();
+        return;
+    }
     // Scout が上限なら Fighter だけ出す
     if (m_scoutList->size() >= m_maxScout)
     {
@@ -48,12 +60,7 @@ void C_EnemySpawner::SpawnEnemyByTime()
         return;
     }
 
-    // Fighter が上限なら Scout だけ出す
-    if (m_fighterList->size() >= m_maxFighter)
-    {
-        SpawnScout();
-        return;
-    }
+  
     // 経過秒数で敵の種類を変える
     float elapsedSec = m_timeFrame / 60.0f;
 
@@ -66,10 +73,19 @@ void C_EnemySpawner::SpawnEnemyByTime()
         if (rand() % 100 < 70) SpawnScout();
         else SpawnFighter();
     }
+    else if(elapsedSec<60)
+    {
+        int r = rand() % 100;
+        if (r < 40) SpawnScout();
+        else if (r < 80) SpawnFighter();
+        else SpawnFrigate();
+    }
     else
     {
-        if (rand() % 100 < 50) SpawnScout();
-        else SpawnFighter();
+        int r = rand() % 100;
+        if (r < 20) SpawnScout();
+        else if (r < 60) SpawnFighter();
+        else SpawnFrigate();
     }
 }
 
@@ -101,10 +117,27 @@ void C_EnemySpawner::SpawnFighter()
     f->SetShieldTex(m_fighterShield);
     f->SetPos(CalcSpawnPos(f->GetRadius()));
     f->Init();  
-
+  
     
 
     m_fighterList->push_back(f);
+}
+
+void C_EnemySpawner::SpawnFrigate()
+{
+    C_Frigate* e = new C_Frigate();
+
+    e->SetBaseTex(m_frigateBase);
+    e->SetEngineTex(m_frigateEngine);
+    e->SetBulletTex(m_frigateBullet);
+    e->SetDestructionTex(m_frigateDestruction);
+    e->SetShieldTex(m_frigateShield);
+    e->SetPos(CalcSpawnPos(e->GetRadius()));
+    e->Init();
+
+   
+
+    m_frigateList->push_back(e);
 }
 
 Math::Vector2 C_EnemySpawner::CalcSpawnPos(float radius)

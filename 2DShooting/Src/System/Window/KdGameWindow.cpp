@@ -10,7 +10,7 @@ bool KdGameWindow::Create(int clientWidth, int clientHeight, const std::string& 
 {
 	// インスタンスハンドル取得
 	HINSTANCE hInst = GetInstanceHandle();
-
+	
 	//===================================================================
 	// メインウィンドウ作成
 	//===================================================================

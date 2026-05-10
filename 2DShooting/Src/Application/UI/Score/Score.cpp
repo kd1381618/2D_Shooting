@@ -2,7 +2,7 @@
 
 void C_Score::Init()
 {
-    m_pos = { 250, -328 };
+    m_pos = { 350, -328 };
 }
 
 void C_Score::Add(unsigned long score)
@@ -39,6 +39,6 @@ void C_Score::Draw()
             &rc
         );
     }
-    Math::Rectangle src = { 0, 0, 207, 40 };
-    SHADER.m_spriteShader.DrawTex(m_scoreTex, m_pos.x-140, m_pos.y, 207, 40, &src);
+    Math::Rectangle src = { 0, 0, 155, 30 };
+    SHADER.m_spriteShader.DrawTex(m_scoreTex, m_pos.x-110, m_pos.y, 155, 30, &src);
 }

@@ -5,6 +5,7 @@
 // ゲームウィンドウクラス
 //
 //=====================================================
+
 class KdGameWindow {
 public:
 
@@ -48,7 +49,6 @@ public:
 	bool ProcessMessage();
 
 private:
-
 	// ウィンドウハンドル
 	HWND	m_hWnd = nullptr;
 

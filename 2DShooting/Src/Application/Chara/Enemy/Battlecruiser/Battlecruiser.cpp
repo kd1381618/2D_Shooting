@@ -63,7 +63,6 @@ void C_Battlecruiser::Update()
             m_timer = 0;
         }
     }
-
     //フェーズ1：戦闘
     if (m_phase == 1)
     {
@@ -131,11 +130,7 @@ void C_Battlecruiser::PlayerBulletHit()
                 m_aliveFlg = false;
                 destructionFlg = true;
                 destructionAnim = 0;
-                int r = rand() % 100;
-                if (r < 10)
-                {
-                    m_gameScene->SpawnMedkit(m_pos);
-                }
+                m_gameScene->SetclearFlg(true);
             }
 
             break;

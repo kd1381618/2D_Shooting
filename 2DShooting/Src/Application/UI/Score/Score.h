@@ -17,7 +17,7 @@ public:
 
 private:
     unsigned long m_score = 0;
-    static const int maxDigits = 10;
+    static const int maxDigits = 6;
     int m_digits[maxDigits] = {};
     KdTexture* m_tex;
     KdTexture* m_scoreTex;

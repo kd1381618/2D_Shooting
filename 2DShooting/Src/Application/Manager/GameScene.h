@@ -12,6 +12,7 @@ class C_Fighter;
 class C_Score;
 class C_EnemySpawner;
 class C_Battlecruiser;
+class C_Frigate;
 
 class C_GameScene : public C_State
 {
@@ -51,6 +52,13 @@ private:
 	KdTexture fighterBulletTex;
 	KdTexture fighterShieldTex;
 
+	std::vector<C_Frigate*> m_frigate;
+	KdTexture frigateBaseTex;
+	KdTexture frigateBulletTex;
+	KdTexture frigateEngineTex;
+	KdTexture frigateDestructionTex;
+
+
 	C_Battlecruiser* m_midBoss = nullptr;
 	KdTexture midBossBaseTex;
 	KdTexture midBossDestructionTex;
@@ -62,6 +70,8 @@ private:
 
 	KdTexture medkitTex;
 	std::vector<C_ItemBase*>m_items;
+
+	KdTexture sousaTex;
 
 	C_EnemySpawner* m_spawner=nullptr;
 	int nowMap;//åªç›ÇÃÉ}ÉbÉvî‘çÜ
@@ -75,6 +85,7 @@ private:
 	Math::Vector2 m_feadoutPos = { 0,0 };
 	Math::Matrix m_feadoutMat;
 	KdTexture feadoutTex;
+	bool clearFlg=false;
 
 
 public:
@@ -93,6 +104,7 @@ public:
 	//setter 
 	int GetNowMap() { return nowMap; }
 	void SetNowMap(int a_nowMap) { nowMap = a_nowMap; }
+	void SetclearFlg(bool flg) { clearFlg = flg; }
 
 	C_Player* GetPlayer() { return m_player; }
 	C_Score* GetScore() { return m_score; }

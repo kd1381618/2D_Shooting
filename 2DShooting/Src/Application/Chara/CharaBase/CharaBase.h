@@ -4,6 +4,7 @@ struct Bullet
 	static const int Num = 100;
 	Math::Vector2 pos;
 	Math::Vector2 move;
+	float scale;
 	bool Flg;
 	float Angle;
 	int shotCnt;
@@ -35,10 +36,12 @@ struct Bullet
 		Converge,
 		Split,
 		Mine,
+		FrigateBrake,
 	}type;
 	Bullet()
 		: pos{ 0,0 }
 		, move{ 0,0 }
+	    , scale(1)
 		, Flg(false)
 		, Angle(0)
 		, shotCnt(0)

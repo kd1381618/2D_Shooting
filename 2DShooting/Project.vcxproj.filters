@@ -85,6 +85,9 @@
     <Filter Include="Src\Application\Chara\BulletUpdate">
       <UniqueIdentifier>{89704373-7f34-41ab-ac40-e80c16926eb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Chara\Frigate">
+      <UniqueIdentifier>{1afc699d-54de-4148-ad1a-82102625b47a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -234,6 +237,9 @@
     <ClInclude Include="Src\Application\Chara\BulletUpdate\BulletUpdate.h">
       <Filter>Src\Application\Chara\BulletUpdate</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Frigate\Frigate.h">
+      <Filter>Src\Application\Chara\Frigate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -349,6 +355,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\BulletUpdate\BulletUpdate.cpp">
       <Filter>Src\Application\Chara\BulletUpdate</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Frigate\Frigate.cpp">
+      <Filter>Src\Application\Chara\Frigate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

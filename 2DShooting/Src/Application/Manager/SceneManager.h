@@ -55,7 +55,9 @@ public:
 	}
 
 	C_State* GetCurrentState() { return m_currentState; }
+	bool m_exit = false;
 
+	void ExitApp() { m_exit = true; }
 private:
 
 	C_SceneManager() {}

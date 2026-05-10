@@ -15,7 +15,7 @@ private:
 
 	// åªç›ÇÃÉVÅ[Éì
 	int m_nowScene;
-
+	bool m_enterFlg;
 
 public:
 
@@ -37,7 +37,8 @@ public:
 
 	void SetNowScene(int nowScene) { m_nowScene = nowScene; }
 
-	
+	bool GetKeyFlg() { return m_enterFlg; }
+	void SetKeyFlg(bool flg) { m_enterFlg = flg; }
 
 private:
 

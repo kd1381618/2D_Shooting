@@ -14,6 +14,7 @@ public:
 
 	void SetTex(KdTexture* tex) { m_tex = tex; }
 	void SetTableTex(KdTexture* tex) { m_tableTex = tex; }
+	void SetGuideTex(KdTexture* tex) { m_guideTex = tex; }
 
 private:
 
@@ -28,5 +29,8 @@ private:
 	Math::Rectangle m_rect;
 	Math::Rectangle m_tablerect;
 	float hpanim;
+	KdTexture* m_guideTex;
+	Math::Matrix m_guidemat;
+	Math::Rectangle m_guiderect;
 };
 

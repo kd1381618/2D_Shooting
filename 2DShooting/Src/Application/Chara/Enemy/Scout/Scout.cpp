@@ -39,7 +39,7 @@ void C_Scout::Init()
 	m_destructionrect = { 0,0,64,64 };
 	m_enginerect = { 0,0,64,64 };
 
-	respawnTimer = 0;
+	//respawnTimer = 0;
 
 	m_radius = 64.0f;
 	m_scalemat = Math::Matrix::CreateScale(2, 2, 1);
@@ -51,7 +51,7 @@ void C_Scout::Action()
 	// 弾発射
 	if (!m_aliveFlg) return;
 	if (destructionFlg) return;
-	if (respawnTimer > 0) return;
+	//if (respawnTimer > 0) return;
 	if (!player->GetAliveFlg()) return;
 	if (shotwait > 0)
 	{
@@ -150,16 +150,16 @@ void C_Scout::Update()
 	{
 		Action();
 	}
-	// 移動
+	//移動
 	m_pos += m_move;
 	if (m_pos.x < -640 - 64)
 	{
 		m_aliveFlg = false;
-		respawnTimer = rand() % 180 + 60; 
+		//respawnTimer = rand() % 180 + 60; 
 		return;
 	}
 
-	// 武器アニメ
+	//武器アニメ
 	Weaponanim += 0.2f;
 	if (Weaponanim > 6.0f) Weaponanim = 0;
 	m_rect = { 0, 64 * (int)Weaponanim,64, 64 };

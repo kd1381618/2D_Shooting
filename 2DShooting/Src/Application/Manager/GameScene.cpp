@@ -10,6 +10,7 @@
 #include"../UI/Score/Score.h"
 #include"../Chara/Enemy/EnemySpawner/EnemySpawner.h"
 #include"../Chara/Enemy/Battlecruiser/Battlecruiser.h"
+#include"../Chara/Enemy/Frigate/Frigate.h"
 
 void C_GameScene::Draw()
 {
@@ -26,6 +27,10 @@ void C_GameScene::Draw()
 	for (auto* f : m_fighter)
 	{
 		f->Draw();
+	}
+	for (auto* e : m_frigate)
+	{
+		e->Draw();
 	}
 	for (auto& item : m_items)
 	{
@@ -45,7 +50,7 @@ void C_GameScene::Update()
 {
 	m_back->Update();
 	m_player->Update();
-	if (!m_midBossAppeared && time > 1.0f)
+	if (!m_midBossAppeared && time > 80.0f)
 	{
 		m_midBoss = new C_Battlecruiser();
 		m_midBoss->Init();
@@ -103,6 +108,18 @@ void C_GameScene::Update()
 			}),
 		m_fighter.end()
 	);
+	for (auto* e : m_frigate) {
+		e->Update();
+		e->PlayerBulletHit();
+		e->FrigateBulletHit();
+	}
+	m_frigate.erase(
+		std::remove_if(m_frigate.begin(), m_frigate.end(),
+			[](C_Frigate* e) {
+				return (!e->GetAlive() && !e->GetDestructionFlg() && !e->HasBullet());
+			}),
+		m_frigate.end()
+	);
 	for (auto& item : m_items) {
 		item->Update();
 	}
@@ -131,12 +148,25 @@ void C_GameScene::Update()
 		feadoutFlg = true;
 		stopFlg = true;
 	}
-	if (feadoutAlpha >= 1.3)
+	if (clearFlg)
+	{
+		feadoutFlg = true;
+	}
+	if (feadoutAlpha >= 1.3&&stopFlg==true)
 	{
 		stopFlg = false;
 		feadoutFlg = false;
 		feadoutAlpha = 0;
-		SCENEMANAGER.ChangeState(new C_GameOverScene());
+		unsigned long score = m_score->GetScore();
+		SCENEMANAGER.ChangeState(new C_GameOverScene(score));
+		return;
+	}
+	if (feadoutAlpha >= 1.3 && clearFlg == true)
+	{
+		feadoutFlg = false;
+		feadoutAlpha = 0;
+		unsigned long score = m_score->GetScore();
+		SCENEMANAGER.ChangeState(new C_ClearScene(score));
 		return;
 	}
 	m_feadoutMat = Math::Matrix::CreateTranslation(m_feadoutPos.x, m_feadoutPos.y, 0);
@@ -188,7 +218,11 @@ void C_GameScene::Init()
 	midBossHpBarTex.Load("Texture/UI/GameScene/hpbar1.png");
 	midBossHpframeTex.Load("Texture/UI/GameScene/hpframe1.png");
 	feadoutTex.Load("Texture/Back/feadout.png");
-
+	frigateBaseTex.Load("Texture/Enemy/Base/FrigateBase.png");
+	frigateBulletTex.Load("Texture/Enemy/Bullet/BigSpaceGun.png");
+	frigateEngineTex.Load("Texture/Enemy/Engine/FrigateEngine.png");
+	frigateDestructionTex.Load("Texture/Enemy/Destruction/FrigateDestruction.png");
+	sousaTex.Load("Texture/UI/GameScene/sousa.png");
 
 	m_spawner->SetScoutBaseTex(&scoutBaseTex);
 	m_spawner->SetScoutEngineTex(&scoutEngineTex);
@@ -203,9 +237,14 @@ void C_GameScene::Init()
 	m_spawner->SetFighterDestructionTex(&fighterDestructionTex);
 	m_spawner->SetFighterShieldTex(&fighterShieldTex);
 
+	m_spawner->SetFrigateBaseTex(&frigateBaseTex);
+	m_spawner->SetFrigateBulletTex(&frigateBulletTex);
+	m_spawner->SetFrigateEngineTex(&frigateEngineTex);
+	m_spawner->SetFrigateDestructionTex(&frigateDestructionTex);
 
 	m_spawner->SetScoutList(&m_scout);
 	m_spawner->SetFighterList(&m_fighter);
+	m_spawner->SetFrigateList(&m_frigate);
 
 	m_player->SetBaseTex(&playerBaseTex);
 	m_player->SetEngineTex(&playerEngineTex);
@@ -213,6 +252,7 @@ void C_GameScene::Init()
 	m_player->SetBulletTex(&playerBulletTex);
 	m_playerhp->SetTex(&playerHpTex);
 	m_playerhp->SetTableTex(&tableTex);
+	m_playerhp->SetGuideTex(&sousaTex);
 	m_player->SetShieldTex(&playerShieldTex);
 
 	m_score->SetTex(&numTex);
@@ -223,6 +263,7 @@ void C_GameScene::Init()
 
 	feadoutFlg = false;
 	stopFlg = false;
+	clearFlg = false;
 	//for (int i = 0; i < 5; i++)
 	//{
 	//	C_Scout* s = new C_Scout();
@@ -297,6 +338,8 @@ void C_GameScene::Release()
 	midBossHpBarTex.Release();
 	midBossHpframeTex.Release();
 	feadoutTex.Release();
+	frigateBaseTex.Release();
+	frigateBulletTex.Release();
 }
 
 void C_GameScene::SpawnMedkit(const Math::Vector2& pos)

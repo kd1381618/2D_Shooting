@@ -32,11 +32,6 @@ private:
 	Math::Vector2 m_startscale;
 	Math::Rectangle m_startrect;
 
-	KdTexture m_guideTex;
-	Math::Matrix m_guideMat;
-	Math::Vector2 m_guidescale;
-	Math::Rectangle m_guiderect;
-
 	KdTexture m_exitTex;
 	Math::Matrix m_exitMat;
 	Math::Vector2 m_exitscale;
@@ -44,5 +39,6 @@ private:
 
 	bool keyFlg;
 	int SelectNum=0;
-
+	bool m_goGame;
+	bool m_goExit;
 };

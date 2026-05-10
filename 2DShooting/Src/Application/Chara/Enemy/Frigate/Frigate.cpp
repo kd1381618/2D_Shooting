@@ -1,26 +1,30 @@
-#include "Fighter.h"
-#include"../../../Manager/SceneManager.h"
-#include"../../../Chara/Player/Player.h"
-#include"../../../Item/Medkit.h"
+#include "Frigate.h"
+#include "../../../Manager/SceneManager.h"
+#include "../../../Chara/Player/Player.h"
 #include"../../../UI/Score/Score.h"
+#include"../../../Item/Medkit.h"
 
-C_Fighter::C_Fighter()
+C_Frigate::C_Frigate()
 {
-    m_gameScene = static_cast<C_GameScene*>(SCENEMANAGER.GetCurrentState());
+    m_gameScene = (C_GameScene*)SCENEMANAGER.GetCurrentState();
 }
 
-void C_Fighter::Init()
+C_Frigate::~C_Frigate()
 {
-    m_hpMax = 2;
+}
+
+void C_Frigate::Init()
+{
+
+    m_hpMax = 3;
     m_hp = m_hpMax;
 
-   
+
     m_aliveFlg = true;
 
-  
+
     destructionFlg = false;
 
-   
     // m_pos = { 640 + 64, float(rand() % 656 - 328) };
 
     m_move = { -3, 0 };
@@ -50,77 +54,51 @@ void C_Fighter::Init()
 
 
     float x = 640.0f + 64;
-    m_pos = { x,y  };
+    m_pos = { x,y };
 }
 
-void C_Fighter::Action()
-{
-    if (!m_aliveFlg) return;
-    if (destructionFlg) return;
-    C_Player* player = m_gameScene->GetPlayer();
-    if (!player->GetAliveFlg()) return;
-    if (shotwait > 0)
-    {
-        shotwait--;
-    }
-    else
-    {
-    
-        float x = player->GetPos().x - m_pos.x;
-        float y = player->GetPos().y - m_pos.y;
-        float baseDeg = DirectX::XMConvertToDegrees(atan2(y, x));
-
-
-        for (int i = 0; i < way; i++)
-        {
-            float deg = baseDeg + (i - way / 2) * interval;
-
-            Bullet b;
-            b.pos = m_pos;
-            b.deg = deg;
-            b.speed = 5.0f;
-
-            // 移動ベクトル
-            float rad = DirectX::XMConvertToRadians(deg);
-            b.move.x = cosf(rad) * b.speed;
-            b.move.y = sinf(rad) * b.speed;
-
-            b.Flg = true;
-            b.anim = 0;
-            m_bullet.push_back(b);
-        }
-        shotwait = rand() % 90 + 60;
-    }
-}
-
-void C_Fighter::Update()
+void C_Frigate::Update()
 {
     C_Player* player = m_gameScene->GetPlayer();
+	// 弾更新
     Action();
-    for (auto& b : m_bullet)
+    for (auto& b : frigatebullet)
     {
         if (!b.Flg) continue;
+        b.timer++;
+     
+       
+        if (b.type == Bullet::BulletType::FrigateBrake)
+        {
+            b.anim += 0.2f;
+            if (b.anim > 10.0)b.anim = 0;
+            b.rect = {32* (int)b.anim,0,32,32 };
+            if (b.pos.x < -700 || b.pos.x>700 || b.pos.y < -360 || b.pos.y>400)b.Flg = false;
+            if (b.timer < 60)        b.pos += b.move;
+            else if (b.timer < 100)   b.pos += b.move * 0.3f;
+            else                     b.pos += b.move * 0;
 
-        b.pos += b.move;
-        b.anim += 0.2f;
-        if (b.anim > 4.0)b.anim = 0;
-        b.rect = { 16 * (int)b.anim,0,16,8 };
-        if (b.pos.x < -700 || b.pos.x>700 || b.pos.y < -360 || b.pos.y>400)b.Flg = false;
+            if (b.timer > 300) {
+                b.scale -= 0.05f;     
+                if (b.scale<= 0.0f)
+                {
+                    b.Flg = false;
+                }
+            }
+        }
     }
-
-    m_bullet.erase(
-        std::remove_if(m_bullet.begin(), m_bullet.end(),
-            [](Bullet& b) { return !b.Flg; }),
-        m_bullet.end()
+    frigatebullet.erase(
+        std::remove_if(frigatebullet.begin(), frigatebullet.end(),
+            [](const Bullet& b) { return !b.Flg; }),
+        frigatebullet.end()
     );
-    for (auto& b : m_bullet)
+    for (auto& b : frigatebullet)
     {
         b.transmat = Math::Matrix::CreateTranslation(b.pos.x, b.pos.y, 0);
-        b.rotatemat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(b.deg));
-        b.scalemat = Math::Matrix::CreateScale(2, 2, 1);
+        b.rotatemat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
+        b.scalemat = Math::Matrix::CreateScale(b.scale, b.scale, 1);
         b.mat = b.scalemat * b.rotatemat * b.transmat;
     }
- 
     if (!m_aliveFlg)
     {
         // 破壊アニメ
@@ -129,7 +107,7 @@ void C_Fighter::Update()
             destructionAnim += 0.2f;
             m_destructionrect = { 0,64 * (int)destructionAnim, 64, 64 };
 
-            if (destructionAnim > 8.0f)
+            if (destructionAnim > 9.0f)
             {
                 destructionFlg = false;
                 destructionAnim = 0;
@@ -137,40 +115,39 @@ void C_Fighter::Update()
         }
         return;
     }
-    if (!m_aliveFlg) return;
 
+    //移動
     m_pos += m_move;
-    if (m_pos.x < -640 - 64 && m_aliveFlg)
+    if (m_pos.x < -640 - 64)
     {
         m_aliveFlg = false;
-        //respawnTimer = rand() % 180 + 60;
         return;
     }
-  
 
-    // 武器アニメ
+    //武器アニメ
     Weaponanim += 0.2f;
     if (Weaponanim > 6.0f) Weaponanim = 0;
-    m_rect = { 0, 64 * (int)Weaponanim,64, 64 };
+    m_rect = { 0, 0,64, 64 };
 
     Engineanim += 0.2f;
-    if (Engineanim > 10.0f)Engineanim = 0;
-    m_enginerect = { 0, 64*(int)Engineanim, 64, 64};
+    if (Engineanim > 12.0f)Engineanim = 0;
+    m_enginerect = { 0, 64 * (int)Engineanim, 64, 64 };
+
 
     float x = player->GetPos().x - m_pos.x;
     float y = player->GetPos().y - m_pos.y;
     float deg = DirectX::XMConvertToDegrees(atan2(y, x));
     m_transmat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
     m_rotatemat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(deg));
-    m_mat = m_scalemat * m_rotatemat*m_transmat;
+    m_mat = m_scalemat * m_rotatemat * m_transmat;
 
 }
 
-void C_Fighter::FighterBulletHit()
+void C_Frigate::FrigateBulletHit()
 {
     C_Player* player = m_gameScene->GetPlayer();
 
-    for (auto& b : m_bullet)
+    for (auto& b : frigatebullet)
     {
         if (!b.Flg) continue;
 
@@ -191,8 +168,9 @@ void C_Fighter::FighterBulletHit()
     }
 }
 
-void C_Fighter::PlayerBulletHit()
+void C_Frigate::PlayerBulletHit()
 {
+
     if (!m_aliveFlg) return;
 
     C_Player* player = m_gameScene->GetPlayer();
@@ -207,14 +185,14 @@ void C_Fighter::PlayerBulletHit()
         float dy = b.pos.y - m_pos.y;
         float dist = sqrtf(dx * dx + dy * dy);
 
-       
+
 
         if (dist < 40)
         {
             b.Flg = false;
-           
+
             m_hp--;
-         
+
             if (m_hp <= 0)
             {
                 m_hp = 0;
@@ -226,8 +204,7 @@ void C_Fighter::PlayerBulletHit()
                 {
                     m_gameScene->SpawnMedkit(m_pos);
                 }
-                //respawnTimer = rand() % 180 + 120;
-                score->Add(300);
+                score->Add(500);
             }
 
             break;
@@ -235,12 +212,41 @@ void C_Fighter::PlayerBulletHit()
     }
 }
 
-void C_Fighter::Draw()
+void C_Frigate::Action()
 {
-    for (auto& b : m_bullet)
-    {
-        if (!b.Flg) continue;
+    if (!m_aliveFlg) return;
 
+    m_shotTimer++;
+
+    // ★ 1.5秒ごとに発射
+    if (m_shotTimer > 90)
+    {
+        m_shotTimer = 0;
+
+        C_Player* player = m_gameScene->GetPlayer();
+        if (!player) return;
+
+        // プレイヤー方向
+        Math::Vector2 dir = player->GetPos() - m_pos;
+        dir.Normalize();
+
+        Bullet b;
+        b.type = Bullet::BulletType::FrigateBrake;
+        b.pos = m_pos;
+        b.move = dir * 8.0f;
+        b.timer = 0;
+        b.scale = 2;
+        b.Flg = true;
+        b.anim = 0;   
+
+        frigatebullet.push_back(b);
+    }
+}
+
+void C_Frigate::Draw()
+{
+    for (auto& b : frigatebullet)
+    {
         SHADER.m_spriteShader.SetMatrix(b.mat);
         SHADER.m_spriteShader.DrawTex(m_bulletTex, b.rect);
     }
@@ -257,5 +263,4 @@ void C_Fighter::Draw()
 
     SHADER.m_spriteShader.SetMatrix(m_mat);
     SHADER.m_spriteShader.DrawTex(m_EngineTex, m_enginerect);
-   
 }

@@ -25,7 +25,7 @@ private:
     const int way = 5;
     const float interval = 10.0f;
     std::vector<Bullet> m_bullet;
-    int respawnTimer;
+    //int respawnTimer;
     int shotwait = 0;
     int ShieldTime;
     int frame;
