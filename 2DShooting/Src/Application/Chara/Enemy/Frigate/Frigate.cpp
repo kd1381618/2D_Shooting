@@ -127,7 +127,7 @@ void C_Frigate::Update()
     //武器アニメ
     Weaponanim += 0.2f;
     if (Weaponanim > 6.0f) Weaponanim = 0;
-    m_rect = { 0, 0,64, 64 };
+    m_rect = { 0, 64 * (int)Engineanim,64, 64 };
 
     Engineanim += 0.2f;
     if (Engineanim > 12.0f)Engineanim = 0;
@@ -155,7 +155,7 @@ void C_Frigate::FrigateBulletHit()
         float dy = b.pos.y - player->GetPos().y;
         float dist = sqrtf(dx * dx + dy * dy);
 
-        if (dist < player->GetHitRadius())
+        if (dist < player->GetHitRadius()+5)
         {
             if (player->GetShieldTime() <= 0)
             {
@@ -190,7 +190,7 @@ void C_Frigate::PlayerBulletHit()
         if (dist < 40)
         {
             b.Flg = false;
-
+            m_gameScene->AddExplosion(b.pos);
             m_hp--;
 
             if (m_hp <= 0)
@@ -200,7 +200,7 @@ void C_Frigate::PlayerBulletHit()
                 destructionFlg = true;
                 destructionAnim = 0;
                 int r = rand() % 100;
-                if (r < 10)
+                if (r < 20)
                 {
                     m_gameScene->SpawnMedkit(m_pos);
                 }
@@ -218,15 +218,13 @@ void C_Frigate::Action()
 
     m_shotTimer++;
 
-    // ★ 1.5秒ごとに発射
-    if (m_shotTimer > 90)
+    if (m_shotTimer > 60)
     {
         m_shotTimer = 0;
 
         C_Player* player = m_gameScene->GetPlayer();
         if (!player) return;
 
-        // プレイヤー方向
         Math::Vector2 dir = player->GetPos() - m_pos;
         dir.Normalize();
 

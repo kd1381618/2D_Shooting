@@ -11,6 +11,7 @@
 #include"../Chara/Enemy/EnemySpawner/EnemySpawner.h"
 #include"../Chara/Enemy/Battlecruiser/Battlecruiser.h"
 #include"../Chara/Enemy/Frigate/Frigate.h"
+#include"../Effect/Explosion.h"
 
 void C_GameScene::Draw()
 {
@@ -32,9 +33,13 @@ void C_GameScene::Draw()
 	{
 		e->Draw();
 	}
-	for (auto& item : m_items)
+	for (auto* item : m_items)
 	{
 		item->Draw();
+	}
+	for (auto* ex : m_explosion)
+	{
+		ex->Draw();
 	}
 	m_playerhp->Draw();
 	m_score->Draw();
@@ -48,9 +53,46 @@ void C_GameScene::Draw()
 
 void C_GameScene::Update()
 {
+	if (GetAsyncKeyState('L') & 0x8000)
+	{
+		if (debugKeyFlg == true)
+		{
+			m_player->SetInvincible(true);
+		}
+	}
+	if (GetAsyncKeyState('K') & 0x8000)
+	{
+		if (debugKeyFlg == true)
+		{
+			m_player->SetInvincible(false);
+		}
+	}
+	if (GetAsyncKeyState('N') & 0x8000)
+	{
+		if (debugKeyFlg == true)
+		{
+			m_midBoss->Setphase(m_midBoss->Getphase() + 1);
+		}
+	}
+	
+	if (GetAsyncKeyState('B') & 0x8000)
+	{
+		if (debugKeyFlg == true)
+		{
+			time = 120;
+		}
+	}
+	if (GetAsyncKeyState('N') & 0x8000 || GetAsyncKeyState('B') & 0x8000||GetAsyncKeyState('K') & 0x8000||GetAsyncKeyState('L') & 0x8000)
+	{
+		debugKeyFlg = false;
+	}
+	else
+	{
+		debugKeyFlg = true;
+	}
 	m_back->Update();
 	m_player->Update();
-	if (!m_midBossAppeared && time > 80.0f)
+	if (!m_midBossAppeared && time > 120.0f)
 	{
 		m_midBoss = new C_Battlecruiser();
 		m_midBoss->Init();
@@ -58,6 +100,8 @@ void C_GameScene::Update()
 		m_midBoss->SetBaseTex(&midBossBaseTex);
 		m_midBoss->SetDestructionTex(&midBossDestructionTex);
 		m_midBoss->SetBulletTex(&midBossBulletTex);
+		m_midBoss->SetEngineTex(&midBossEngineTex);
+		m_midBoss->SetShieldTex(&midBossShieldTex);
 		m_midBoss->SetHpBarTex(&midBossHpBarTex);
 		m_midBoss->SetHpFrameTex(&midBossHpframeTex);
 
@@ -128,7 +172,15 @@ void C_GameScene::Update()
 			[](C_ItemBase* item) { return !item->IsAlive(); }),
 		m_items.end()
 	);
-
+	for (auto* ex : m_explosion)
+	{
+		ex->Update();
+	}
+	m_explosion.erase(
+		std::remove_if(m_explosion.begin(), m_explosion.end(),
+			[](C_Explosion* ex) { return !ex->GetFlg(); }),
+		m_explosion.end()
+	);
 	m_playerhp->Update();
 	m_score->Update();
 
@@ -180,11 +232,7 @@ void C_GameScene::ChangeUpdate()
 
 void C_GameScene::Init()
 {
-	//player=================================================================================
-	//std::shared_ptr<C_Player>player;
-	//player = std::make_shared<C_Player>();//インスタンス生成
-	//player->Init();						//初期化
-	//m_chara.push_back(player);		//リストへ追加
+
 	if (m_player == nullptr)m_player = new C_Player;
 	if (m_playerhp == nullptr)m_playerhp = new C_PlayerHp;
 	if (m_back == nullptr)m_back = new C_Back;//背景
@@ -215,14 +263,17 @@ void C_GameScene::Init()
 	midBossBaseTex.Load("Texture/Enemy/Base/BattlecruiserBase.png");
 	midBossDestructionTex.Load("Texture/Enemy/Destruction/BattlecruiserDestruction.png");
 	midBossBulletTex.Load("Texture/Enemy/Bullet/SpinningBullet.png");
+	midBossEngineTex.Load("Texture/Enemy/Engine/BattlecruiserEngine.png");
 	midBossHpBarTex.Load("Texture/UI/GameScene/hpbar1.png");
 	midBossHpframeTex.Load("Texture/UI/GameScene/hpframe1.png");
+	midBossShieldTex.Load("Texture/Enemy/Shield/BattlecruiserShield.png");
 	feadoutTex.Load("Texture/Back/feadout.png");
 	frigateBaseTex.Load("Texture/Enemy/Base/FrigateBase.png");
 	frigateBulletTex.Load("Texture/Enemy/Bullet/BigSpaceGun.png");
 	frigateEngineTex.Load("Texture/Enemy/Engine/FrigateEngine.png");
 	frigateDestructionTex.Load("Texture/Enemy/Destruction/FrigateDestruction.png");
-	sousaTex.Load("Texture/UI/GameScene/sousa.png");
+	sousaTex.Load("Texture/UI/GameScene/sousa1.png");
+	explosionTex.Load("Texture/Effect/explosion.png");
 
 	m_spawner->SetScoutBaseTex(&scoutBaseTex);
 	m_spawner->SetScoutEngineTex(&scoutEngineTex);
@@ -264,39 +315,7 @@ void C_GameScene::Init()
 	feadoutFlg = false;
 	stopFlg = false;
 	clearFlg = false;
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	C_Scout* s = new C_Scout();
-
-	//	//テクスチャを全員にセット
-	//	s->SetBaseTex(&scoutBaseTex);
-	//	s->SetEngineTex(&scoutEngineTex);
-	//	s->SetBulletTex(&scoutBulletTex);
-	//	s->SetDestructionTex(&scoutDestructionTex);
-	//	s->SetShieldTex(&scoutShieldTex);
-	//	s->Init();
-	//	m_scout.push_back(s);
-	//}
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	C_Fighter* f = new C_Fighter();
-	//	f->SetBaseTex(&fighterBaseTex);
-	//	f->SetBulletTex(&fighterBulletTex);
-	//	f->SetEngineTex(&fighterEngineTex);
-	//	f->SetDestructionTex(&fighterDestructionTex);
-	//	f->SetShieldTex(&fighterShieldTex);
-	//	f->Init();
-	//	m_fighter.push_back(f);
-	//}
 	
-	
-	/*m_scout->SetBaseTex(&scoutBaseTex);
-	m_scout->SetEngineTex(&scoutEngineTex);
-	m_scout->SetBulletTex(&scoutBulletTex);
-	m_scout->SetDestructionTex(&scoutDestructionTex);
-	m_scout->SetShieldTex(&scoutShieldTex);*/
-
-	//m_medkit->SetTex(&medkitTex);
 	frame = 0;
 	time = 0;
 }
@@ -317,6 +336,7 @@ void C_GameScene::Release()
 	playerWeaponTex.Release();
 	playerBulletTex.Release();
 	playerHpTex.Release();
+	tableTex.Release();
 	playerShieldTex.Release();
 	backTex.Release();
 	scoutBaseTex.Release();
@@ -337,9 +357,14 @@ void C_GameScene::Release()
 	midBossBulletTex.Release();
 	midBossHpBarTex.Release();
 	midBossHpframeTex.Release();
+	midBossShieldTex.Release();
 	feadoutTex.Release();
 	frigateBaseTex.Release();
 	frigateBulletTex.Release();
+	frigateEngineTex.Release();
+	frigateDestructionTex.Release();
+	sousaTex.Release();
+	explosionTex.Release();
 }
 
 void C_GameScene::SpawnMedkit(const Math::Vector2& pos)
@@ -349,4 +374,11 @@ void C_GameScene::SpawnMedkit(const Math::Vector2& pos)
 	m->SetTex(&medkitTex);   
 	m->SetAlive(true);
 	m_items.push_back(m);
+}
+
+void C_GameScene::AddExplosion(Math::Vector2 pos)
+{
+	C_Explosion* ex = new C_Explosion(pos);
+	ex->SetExplosionTex(&explosionTex);   
+	m_explosion.push_back(ex);
 }

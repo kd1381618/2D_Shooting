@@ -29,6 +29,7 @@ public:
 	bool GetAliveFlg() { return m_aliveFlg; }
 	float GetHitRadius() const { return m_hitRadius; }
 	float GetRadius()const { return 36.0f; }
+	void SetInvincible(bool flg) { Invincible = flg; }
 
 private:
 
@@ -49,7 +50,9 @@ private:
 	int ShieldTime;
 	float m_alpha;
 	float a_alpha;
+	bool Invincible;
 	int shotwait = 0;
 	static const int shotinterval = 20;
 	float m_hitRadius = 15.0f;
+	
 };

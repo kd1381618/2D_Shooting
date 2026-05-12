@@ -212,7 +212,7 @@ void C_Fighter::PlayerBulletHit()
         if (dist < 40)
         {
             b.Flg = false;
-           
+            m_gameScene->AddExplosion(b.pos);
             m_hp--;
          
             if (m_hp <= 0)

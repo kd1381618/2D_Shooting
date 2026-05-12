@@ -32,7 +32,7 @@ void C_Medkit::Update()
 			return;
 		}
 			anim += 0.2f;
-			if (anim > 12.0f)
+			if (anim > 8.0f)
 			{
 				anim = 0;
 			}

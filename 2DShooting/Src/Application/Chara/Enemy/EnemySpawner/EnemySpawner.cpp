@@ -23,7 +23,7 @@ void C_EnemySpawner::Update()
 
     // 難易度カーブ付きスポーン間隔
     float spawnInterval = 120 - elapsedSec * 1.0f;  
-    if (spawnInterval < 80) spawnInterval = 80;     
+    if (spawnInterval < 100) spawnInterval = 100;     
 
     // スポーン処理
     if (m_frame >= spawnInterval)
@@ -47,13 +47,12 @@ void C_EnemySpawner::SpawnEnemyByTime()
         SpawnFighter();
         return;
     }
-    // Fighter が上限なら Scout だけ出す
     if (m_fighterList->size() >= m_maxFighter)
     {
         SpawnScout();
         return;
     }
-    // Scout が上限なら Fighter だけ出す
+  
     if (m_scoutList->size() >= m_maxScout)
     {
         SpawnFighter();
@@ -64,16 +63,16 @@ void C_EnemySpawner::SpawnEnemyByTime()
     // 経過秒数で敵の種類を変える
     float elapsedSec = m_timeFrame / 60.0f;
 
-    if (elapsedSec < 20)
+    if (elapsedSec < 30)
     {
         SpawnScout();
     }
-    else if (elapsedSec < 40)
+    else if (elapsedSec < 60)
     {
-        if (rand() % 100 < 70) SpawnScout();
+        if (rand() % 100 < 50) SpawnScout();
         else SpawnFighter();
     }
-    else if(elapsedSec<60)
+    else if(elapsedSec<90)
     {
         int r = rand() % 100;
         if (r < 40) SpawnScout();

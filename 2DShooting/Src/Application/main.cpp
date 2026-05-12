@@ -34,7 +34,7 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	// ウィンドウ作成
 	//===================================================================
-	if (m_window.Create(w, h, "ゲーム名", "Window") == false) {
+	if (m_window.Create(w, h, "VOID BLITZ", "Window") == false) {
 		MessageBoxA(nullptr, "ウィンドウ作成に失敗", "エラー", MB_OK);
 		return false;
 	}
@@ -103,7 +103,7 @@ bool Application::Init(int w, int h)
 		io.Fonts->AddFontDefault();
 		io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msgothic.ttc", 13.0f, &config, glyphRangesJapanese);
 	}
-
+	ShowCursor(false);
 	return true;
 }
 

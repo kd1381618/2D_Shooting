@@ -1,6 +1,11 @@
 #include "BulletUpdate.h"
 #include"../../Manager/SceneManager.h"
 #include"../Player/Player.h"
+
+void UpdateSpiral(Bullet& b)
+{
+    b.pos += b.move * b.speed;
+}
 void UpdateConverge(Bullet& b)
 {
     b.timer++;
@@ -30,7 +35,7 @@ void UpdateConverge(Bullet& b)
     }
 }
 
-void UpdateSplit(Bullet& b, std::vector<Bullet>& bulletList)
+void UpdateSplit(Bullet& b, std::vector<Bullet>& newBullets)
 {
     b.timer++;
     b.pos += b.move;
@@ -53,16 +58,48 @@ void UpdateSplit(Bullet& b, std::vector<Bullet>& bulletList)
             Bullet c = b;
             c.move = { cosf(a) * 8, sinf(a) * 8 };
             c.timer = 0;
-            c.split = true; // éqíeÇÕï™óÙÇµÇ»Ç¢
+            c.split = true; 
             c.color = { 0,1,1,1 };
-            bulletList.push_back(c);
+            newBullets.push_back(c);
         }
 
         b.Flg = false; // å≥íeè¡Ç∑
     }
 }
 
-void UpdateMine(Bullet& b, std::vector<Bullet>& bulletList)
+void UpdateLockSplit(Bullet& b, std::vector<Bullet>& newBullets)
+{
+    b.timer++;
+    b.pos += b.move;
+    if (!b.split && b.timer > 60)
+    {
+        b.split = true;
+
+        float baseAngle = atan2f(b.move.y, b.move.x);
+
+        // ï™óÙäpìxÇÃÉäÉXÉgÅi5WAYÅj
+        float angles[] = {
+            baseAngle,
+            baseAngle + DirectX::XMConvertToRadians(15),
+            baseAngle - DirectX::XMConvertToRadians(15),
+            baseAngle + DirectX::XMConvertToRadians(30),
+            baseAngle - DirectX::XMConvertToRadians(30),
+        };
+        for (float a : angles)
+        {
+            Bullet c = b;
+            c.move = { cosf(a) * 8, sinf(a) * 8 };
+            c.timer = 0;
+            c.split = true; 
+            c.color = { 0,1,1,1 };
+            newBullets.push_back(c);
+        }
+
+        b.Flg = false; // å≥íeè¡Ç∑
+    }
+}
+
+void UpdateMine(Bullet& b, std::vector<Bullet>& newBullets)
 {
     b.timer++;
 
@@ -95,13 +132,75 @@ void UpdateMine(Bullet& b, std::vector<Bullet>& bulletList)
             c.timer = 0;
             c.color = { 1, 0, 1, 1 }; 
 
-            bulletList.push_back(c);
+            newBullets.push_back(c);
         }
 
-        // å≥ÇÃínóãíeÇÕè¡Ç∑
+       
         b.Flg = false;
     }
 }
+void UpdateSpiralCross(Bullet& b)
+{
+    b.pos.x += cosf(b.ang) * b.speed;
+    b.pos.y += sinf(b.ang) * b.speed;
+}
+
+void UpdateConvergeBurst(Bullet& b, std::vector<Bullet>& newBullets)
+{
+    b.timer++;
+
+    // é˚ë©ÉtÉFÅ[ÉY
+    if (b.timer < 100)
+    {
+        b.pos += b.move * b.speed;
+        return;
+    }
+
+    // ägéUÉtÉFÅ[ÉY
+    if (b.timer == 100)
+    {
+        const float PI = 3.14f;
+        for (int i = 0; i < 8; i++)
+        {
+            Bullet nb;
+            nb.Flg = true;
+            nb.type = Bullet::Spiral;  
+            nb.pos = b.pos;
+
+            float a = (PI * 2.0f / 8.0f) * i;
+            nb.ang = a;
+            nb.speed = 5.0f;
+            nb.move = { cosf(a), sinf(a) };
+            nb.timer = 0;
+
+            newBullets.push_back(nb);
+           
+        }
+        b.Flg = false;
+        return;
+    }
+}
+
+void UpdateRotateRing(Bullet& b)
+{
+    b.timer++;
+
+    // îºåaÇçLÇ∞ÇÈ
+    b.rad += 2.0f;
+
+    // ëSëÃÇÃâÒì]
+    b.baseAngle += b.rotateSpeed;
+
+    // à íuÇåvéZ
+    float x = cosf(b.baseAngle) * b.rad;
+    float y = sinf(b.baseAngle) * b.rad;
+
+    b.pos = { b.origin.x + x, b.origin.y + y };
+
+    if (b.rad > 1200)
+        b.Flg = false;
+}
+
 
 
 
@@ -111,16 +210,34 @@ void UpdateBullet(Bullet& b, std::vector<Bullet>& bulletList)
 
     switch (b.type)
     {
+    case Bullet::Spiral:
+        UpdateSpiral(b);
+        break;
     case Bullet::Converge:
         UpdateConverge(b);
         break;
     case Bullet::Split:
         UpdateSplit(b, bulletList);
         break;
+    case Bullet::lockSplit:
+        UpdateLockSplit(b, bulletList);
+        break;
     case Bullet::Mine:
         UpdateMine(b, bulletList);
         break;
+    case Bullet::SpiralCross:
+        UpdateSpiralCross(b);
+        break;
+    case Bullet::ConvergeBurst:
+        UpdateConvergeBurst(b, bulletList);
+        break;
+    case Bullet::RotateRing:
+        UpdateRotateRing(b);
+        break;
     }
+
 }
+
+
 
 

@@ -21,11 +21,15 @@ private:
 	float m_alpha;
 	float m_gradation;
 
-	KdTexture m_titleTex;
+	KdTexture m_backTex;
 	Math::Vector2 m_pos;
 	Math::Rectangle m_rect;
-	Math::Matrix m_titleMat;
-	Math::Matrix m_titleMat2;
+	Math::Matrix m_backMat;
+	Math::Matrix m_backMat2;
+
+	KdTexture m_titleTex;
+	Math::Rectangle m_titlerect;
+	Math::Matrix m_titlemat;
 
 	KdTexture m_startTex;
 	Math::Matrix m_startMat;

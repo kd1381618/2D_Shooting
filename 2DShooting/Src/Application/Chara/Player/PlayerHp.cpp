@@ -12,7 +12,7 @@ void C_PlayerHp::Init()
 {
 	m_tablemat = Math::Matrix::CreateTranslation(0, -327.5, 0);
 	m_tablerect = { 0,0,1280,65 };
-	m_guiderect = { 0,0,529,46 };
+	m_guiderect = { 0,0,352,46 };
 	m_guidemat = Math::Matrix::CreateTranslation(-180, -330, 0);
 
 }

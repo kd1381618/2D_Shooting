@@ -48,10 +48,8 @@ void C_Scout::Init()
 void C_Scout::Action()
 {
 	C_Player* player = m_gameScene->GetPlayer();
-	// 弾発射
 	if (!m_aliveFlg) return;
 	if (destructionFlg) return;
-	//if (respawnTimer > 0) return;
 	if (!player->GetAliveFlg()) return;
 	if (shotwait > 0)
 	{
@@ -98,36 +96,6 @@ void C_Scout::Update()
 		b.scalemat = Math::Matrix::CreateScale(2, 2, 1);
 		b.mat = b.scalemat * b.rotatemat * b.transmat;
 	}
-	//if (!m_aliveFlg && !destructionFlg)
-	//{
-	//	if (respawnTimer > 0)
-	//	{
-	//		respawnTimer--;
-	//		return;
-	//	}
-	//	else
-	//	{
-	//		m_aliveFlg = true;
-	//		m_hp = m_hpMax;
-
-	//		//// ランダム位置に再出現
-	//		//m_pos.x = 640 + 64;
-	//		//m_pos.y = (-296 + 65) + (rand() % 296 - (-296 + 65));
-	//		float spawnMinY = -360 + 65+64; // UI を除外
-	//		float spawnMaxY = 360-64;
-
-	//		float y = spawnMinY + (rand() % (int)(spawnMaxY - spawnMinY));
-	//		float x = 700; // 画面右外
-	//		m_pos = { x,y };
-
-	//		ShieldTime = 0;
-	//		Shieldanim = 0;
-	//		Weaponanim = 0;
-
-	//		frame = rand() % 200 + 50;
-	//	}
-
-	//}
 	
 	if (!m_aliveFlg)
 	{
@@ -164,6 +132,7 @@ void C_Scout::Update()
 	if (Weaponanim > 6.0f) Weaponanim = 0;
 	m_rect = { 0, 64 * (int)Weaponanim,64, 64 };
 	
+	//エンジンアニメ
 	Engineanim += 0.2f;
 	if (Engineanim > 10.0f)Engineanim = 0;
 	m_enginerect = { 0, 64 * (int)Engineanim, 64, 64 };
@@ -228,7 +197,7 @@ void C_Scout::PlayerBulletHit()
 		if (dist < 40)
 		{
 			b.Flg = false;
-			
+			m_gameScene->AddExplosion(b.pos);
 			m_hp--;
 			
 			if (m_hp <= 0)
@@ -238,7 +207,7 @@ void C_Scout::PlayerBulletHit()
 				destructionFlg = true;  
 				destructionAnim = 0;
 				int r = rand() % 100;
-				if (r < 10)
+				if (r < 100)
 				{
 					m_gameScene->SpawnMedkit(m_pos);
 				}

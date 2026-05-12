@@ -88,6 +88,9 @@
     <Filter Include="Src\Application\Chara\Frigate">
       <UniqueIdentifier>{1afc699d-54de-4148-ad1a-82102625b47a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Effect">
+      <UniqueIdentifier>{758587f8-e93e-4985-8dbe-209d187af50d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -240,6 +243,9 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Frigate\Frigate.h">
       <Filter>Src\Application\Chara\Frigate</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Effect\Explosion.h">
+      <Filter>Src\Application\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -358,6 +364,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Frigate\Frigate.cpp">
       <Filter>Src\Application\Chara\Frigate</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Effect\Explosion.cpp">
+      <Filter>Src\Application\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

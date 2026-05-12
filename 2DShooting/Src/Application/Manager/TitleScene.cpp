@@ -6,15 +6,18 @@ void C_TitleScene::Init()
 {
 	m_goGame = false;
 	m_goExit = false;
-	m_titleTex.Load("Texture/TitleScene/Titleback.png");
+	m_backTex.Load("Texture/TitleScene/Titleback.png");
 	m_startTex.Load("Texture/TitleScene/START.png");
 	m_exitTex.Load("Texture/TitleScene/EXIT.png");
+	m_titleTex.Load("Texture/TitleScene/VOIDBLITZ.png");
 	m_pos = { 0,0 };
 	m_rect = { 0,0,1280,720 };
 	m_startscale = { 1,1 };
 	m_startrect = { 0,0,300,135 };
 	m_exitrect = { 0,0,236,135 };
+	m_titlerect = { 0,0,1024,255 };
 	m_exitscale={ 1,1 };
+	m_titlemat = Math::Matrix::CreateTranslation(0, 150, 0);
 }
 void C_TitleScene::ChangeUpdate()
 {
@@ -79,9 +82,9 @@ void C_TitleScene::Update()
 	}
 	
 	Math::Matrix transmat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_titleMat = transmat;
+	m_backMat = transmat;
 	Math::Matrix transmat2 = Math::Matrix::CreateTranslation(m_pos.x + 1280, 0, 0);
-	m_titleMat2 = transmat2;
+	m_backMat2 = transmat2;
 
 	Math::Matrix starttrans = Math::Matrix::CreateTranslation(0, -150, 0);
 	Math::Matrix startscale = Math::Matrix::CreateScale(m_startscale.x, m_startscale.y, 1);
@@ -98,11 +101,14 @@ void C_TitleScene::Update()
 void C_TitleScene::Draw()
 {
 
-	SHADER.m_spriteShader.SetMatrix(m_titleMat);
-	SHADER.m_spriteShader.DrawTex(&m_titleTex, m_rect);
+	SHADER.m_spriteShader.SetMatrix(m_backMat);
+	SHADER.m_spriteShader.DrawTex(&m_backTex, m_rect);
 
-	SHADER.m_spriteShader.SetMatrix(m_titleMat2);
-	SHADER.m_spriteShader.DrawTex(&m_titleTex, m_rect);
+	SHADER.m_spriteShader.SetMatrix(m_backMat2);
+	SHADER.m_spriteShader.DrawTex(&m_backTex, m_rect);
+
+	SHADER.m_spriteShader.SetMatrix(m_titlemat);
+	SHADER.m_spriteShader.DrawTex(&m_titleTex, m_titlerect);
 
 	SHADER.m_spriteShader.SetMatrix(m_startMat);
 	SHADER.m_spriteShader.DrawTex(&m_startTex, m_startrect);
@@ -115,7 +121,8 @@ void C_TitleScene::Draw()
 void C_TitleScene::Release()
 {
 
-	m_titleTex.Release();
+	m_backTex.Release();
 	m_startTex.Release();
 	m_exitTex.Release();
+	m_titleTex.Release();
 }

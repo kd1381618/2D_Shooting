@@ -20,11 +20,13 @@ void C_Player::Init()
 	m_pos = { -500,0 };
 	m_move = { 0,0 };
 	m_aliveFlg = true;
+	Invincible = false;
 	m_rect = { 0,0,48,48 };
 	Engineanim = 0;
 	ShieldTime = 0;
 	Shieldanim = 0;
 	Baseanim = 0;
+	Weaponanim = 0;
 	m_enginerect = { 0,0,48,48 };
 	m_weaponrect = { 0,0,48,48 };
 	m_shieldrect = { 0,0,64,64 };
@@ -64,24 +66,17 @@ void C_Player::Action()
 			m_move.x *= 0.5;
 			m_move.y *= 0.5;
 		}
-		if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+		if (shotwait == 0)
 		{
-			if (shotwait == 0)
-			{
-				Bullet b;
-				b.pos = m_pos;
-				b.move = { 10,0 };
-				b.Flg = true;
-				playerbullet.push_back(b);
-				shotwait = shotinterval;
-			}
+			Bullet b;
+			b.pos = m_pos;
+			b.move = { 10,0 };
+			b.Flg = true;
+			playerbullet.push_back(b);
+			shotwait = shotinterval;
+
 		}
-		else
-		{
-			Weaponanim = 0.0f;
-		}
-		
-		
+			
 	}
 }
 
@@ -124,6 +119,7 @@ void C_Player::Update()
 		{
 			Engineanim = 0.0f;
 		}
+		Weaponanim += 0.2;
 		if (Weaponanim > 7.0f)
 		{
 			Weaponanim = 0.0f;
@@ -135,6 +131,7 @@ void C_Player::Update()
 		{
 			m_hp = 4;
 		}
+	
 		if (m_hp <= 0)
 		{
 			m_aliveFlg = false;
@@ -159,7 +156,7 @@ void C_Player::Update()
 				Shieldanim = 0;
 			}
 		}
-
+		Baseanim = m_hpMax - m_hp;
 		m_enginerect = { 48 * (int)Engineanim,0,48,48 };
 		m_weaponrect = { 48 * (int)Weaponanim,0,48,48 };
 		m_shieldrect = { 64 * (int)Shieldanim,0,64,64 };
@@ -180,32 +177,6 @@ void C_Player::Update()
 void C_Player::BulletHit()
 {
 
-	/*C_Scout* scout = m_gameScene->GetScout();
-
-		if (m_aliveFlg)
-		{
-			for (int i = 0; i < scout->GetBulletNum(); i++)
-			{
-				if (scout->GetBulletFlg(i) == true)
-				{
-					float a = m_pos.x - scout->GetBulletPos(i).x;
-					float b = m_pos.y - scout->GetBulletPos(i).y;
-					float c = sqrt(a * a + b * b);
-					if (c < 40)
-					{
-						if (ShieldTime <= 0)
-						{
-							m_hp--;
-							Baseanim++;
-							scout->SetBulletFlg(i, false);
-							ShieldTime = 180;
-							break;
-						}
-					}
-				}
-			}
-
-		}*/
 	
 }
 
@@ -245,8 +216,15 @@ void C_Player::Damage(int amount)
 
 	if (m_hp <= 0)
 	{
-		m_hp = 0;
-		m_aliveFlg = false;
+		if (Invincible)
+		{
+			m_hp = 1;
+		}
+		else
+		{
+			m_hp = 0;
+			m_aliveFlg = false;
+		}
 	}
 }
 

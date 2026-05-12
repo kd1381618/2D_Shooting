@@ -13,6 +13,8 @@ struct Bullet
 	float radius;
 	float speed;
 	float rad;
+	float rotateSpeed;
+	float baseAngle;
 	float ang;
 	float deg;
 	float anim;
@@ -26,7 +28,7 @@ struct Bullet
 	// Žû‘©’e—p
 	bool converge;
 	Math::Vector2 target;
-
+	Math::Vector2 origin;
 	// •ª—ô’e—p
 	bool split;
 	int splitTimer;
@@ -35,8 +37,13 @@ struct Bullet
 	enum BulletType {
 		Converge,
 		Split,
+		lockSplit,
+		Spiral,
 		Mine,
 		FrigateBrake,
+		SpiralCross,
+		ConvergeBurst,
+		RotateRing,
 	}type;
 	Bullet()
 		: pos{ 0,0 }

@@ -18,17 +18,23 @@ public:
     
     void ShotConverge();
     void ShotSplit();
+    void ShotLockSplit();
     void ShotMine();
+    void ShotSpiralCross();
+    void ShotConvergeBurst();
+    void ShotRotateRing();
     std::vector<Bullet> Bullets;
     bool IsDead() const { return !m_aliveFlg; }
     bool GetDestructionFlg() { return destructionFlg; }
     void SetHpBarTex(KdTexture* tex) { hpbarTex = tex; }
     void SetHpFrameTex(KdTexture* tex) { hpframeTex = tex; }
+    int Getphase() { return m_phase; }
+    void Setphase(int phase);
 private:
 
     C_GameScene* m_gameScene = nullptr;
    
-    int m_phase;        // 0 = 入場, 1 = 戦闘
+    int m_phase;        
     int m_timer;        // 行動タイマー
     int m_hpMax;        // 最大HP
     KdTexture* hpbarTex;
@@ -41,4 +47,6 @@ private:
     Math::Matrix hpbarscale;
     Math::Matrix hpframescale;
     Math::Matrix hpbartrans;
+    int m_prevPhase;
+    int m_phaseDelay;   // フェーズ移行後の猶予タイマー
 };

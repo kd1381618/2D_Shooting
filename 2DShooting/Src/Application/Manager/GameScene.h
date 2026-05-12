@@ -13,6 +13,7 @@ class C_Score;
 class C_EnemySpawner;
 class C_Battlecruiser;
 class C_Frigate;
+class C_Explosion;
 
 class C_GameScene : public C_State
 {
@@ -63,6 +64,8 @@ private:
 	KdTexture midBossBaseTex;
 	KdTexture midBossDestructionTex;
 	KdTexture midBossBulletTex;
+	KdTexture midBossEngineTex;
+	KdTexture midBossShieldTex;
 	KdTexture midBossHpBarTex;
 	KdTexture midBossHpframeTex;
 	bool m_midBossAppeared = false;
@@ -70,6 +73,9 @@ private:
 
 	KdTexture medkitTex;
 	std::vector<C_ItemBase*>m_items;
+
+	std::vector<C_Explosion*>m_explosion;
+	KdTexture explosionTex;
 
 	KdTexture sousaTex;
 
@@ -86,7 +92,7 @@ private:
 	Math::Matrix m_feadoutMat;
 	KdTexture feadoutTex;
 	bool clearFlg=false;
-
+	bool debugKeyFlg = true;
 
 public:
 
@@ -99,7 +105,8 @@ public:
 	void Draw() override;
 	void Release() override;
 	void SpawnMedkit(const Math::Vector2& pos);
-
+	void AddExplosion(Math::Vector2 pos);
+	
 
 	//setter 
 	int GetNowMap() { return nowMap; }
