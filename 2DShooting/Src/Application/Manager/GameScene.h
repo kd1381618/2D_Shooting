@@ -26,6 +26,15 @@ private:
 	KdTexture playerWeaponTex;
 	KdTexture playerBulletTex;
 	KdTexture playerShieldTex;
+	KdTexture spaceGunBulletTex;
+	KdTexture spacegunBaseTex;
+	KdTexture spacegunEffectTex;
+	KdTexture spacegunWeaponTex;
+	KdTexture rocketBulletTex;
+	KdTexture rocketBaseTex;
+	KdTexture rocketEffectTex;
+	KdTexture rocketWeaponTex;
+	KdTexture HealTex;
 
 	C_PlayerHp* m_playerhp = nullptr;
 	KdTexture playerHpTex;
@@ -94,9 +103,11 @@ private:
 	bool clearFlg=false;
 	bool debugKeyFlg = true;
 
+	int m_Type;
+
 public:
 
-	C_GameScene() {}
+	C_GameScene(int type);
 	~C_GameScene() {}
 
 	void Init() override;
@@ -106,14 +117,17 @@ public:
 	void Release() override;
 	void SpawnMedkit(const Math::Vector2& pos);
 	void AddExplosion(Math::Vector2 pos);
-	
+	C_CharaBase* FindNearestEnemy(const Math::Vector2& pos);
 
 	//setter 
 	int GetNowMap() { return nowMap; }
 	void SetNowMap(int a_nowMap) { nowMap = a_nowMap; }
 	void SetclearFlg(bool flg) { clearFlg = flg; }
+	//void SetType(int type) { m_Type = type; }
 
 	C_Player* GetPlayer() { return m_player; }
 	C_Score* GetScore() { return m_score; }
-	//C_Scout* GetScout() { return  m_scout; }
+	std::vector<C_Scout*> GetScout() { return  m_scout; }
+	std::vector<C_Fighter*> GetFighter() { return  m_fighter; }
+	std::vector<C_Frigate*> GetFrigate() { return  m_frigate; }
 };

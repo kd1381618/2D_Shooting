@@ -176,6 +176,7 @@
     <ClInclude Include="Src\Application\Manager\GameScene.h" />
     <ClInclude Include="Src\Application\Manager\ClearScene.h" />
     <ClInclude Include="Src\Application\Manager\SceneManager.h" />
+    <ClInclude Include="Src\Application\Manager\SelectScene.h" />
     <ClInclude Include="Src\Application\Manager\State.h" />
     <ClInclude Include="Src\Application\Manager\TitleScene.h" />
     <ClInclude Include="Src\Application\Scene.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="Src\Application\Manager\GameOverScene.cpp" />
     <ClCompile Include="Src\Application\Manager\GameScene.cpp" />
     <ClCompile Include="Src\Application\Manager\ClearScene.cpp" />
+    <ClCompile Include="Src\Application\Manager\SelectScene.cpp" />
     <ClCompile Include="Src\Application\Manager\State.cpp" />
     <ClCompile Include="Src\Application\Manager\TitleScene.cpp" />
     <ClCompile Include="Src\Application\Scene.cpp" />

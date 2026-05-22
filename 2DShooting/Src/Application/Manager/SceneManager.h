@@ -3,6 +3,7 @@
 #include"GameScene.h"
 #include"ClearScene.h"
 #include"GameOverScene.h"
+#include"SelectScene.h"
 
 class C_SceneManager
 {

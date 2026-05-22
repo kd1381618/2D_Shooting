@@ -15,7 +15,7 @@ void C_Medkit::Init()
 	m_alive = true;
 	anim = 0;
 	m_rect = {0,0,32,32};
-	m_scale = Math::Matrix::CreateScale(3, 3, 1);
+	m_scale = Math::Matrix::CreateScale(2, 2, 1);
 	
 }
 
@@ -32,7 +32,7 @@ void C_Medkit::Update()
 			return;
 		}
 			anim += 0.2f;
-			if (anim > 8.0f)
+			if (anim > 15.0f)
 			{
 				anim = 0;
 			}

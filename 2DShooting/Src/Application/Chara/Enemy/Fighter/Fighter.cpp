@@ -11,7 +11,7 @@ C_Fighter::C_Fighter()
 
 void C_Fighter::Init()
 {
-    m_hpMax = 2;
+    m_hpMax = 5;
     m_hp = m_hpMax;
 
    
@@ -103,8 +103,8 @@ void C_Fighter::Update()
 
         b.pos += b.move;
         b.anim += 0.2f;
-        if (b.anim > 4.0)b.anim = 0;
-        b.rect = { 16 * (int)b.anim,0,16,8 };
+        if (b.anim > 8.0)b.anim = 0;
+        b.rect = { 0,9 * (int)b.anim,12,9 };
         if (b.pos.x < -700 || b.pos.x>700 || b.pos.y < -360 || b.pos.y>400)b.Flg = false;
     }
 
@@ -209,27 +209,60 @@ void C_Fighter::PlayerBulletHit()
 
        
 
-        if (dist < 40)
+        switch (player->GetType())
         {
-            b.Flg = false;
-            m_gameScene->AddExplosion(b.pos);
-            m_hp--;
-         
-            if (m_hp <= 0)
+        case PlayerType::cannon:
+            if (dist < 33)
             {
-                m_hp = 0;
-                m_aliveFlg = false;
-                destructionFlg = true;
-                destructionAnim = 0;
-                int r = rand() % 100;
-                if (r < 10)
-                {
-                    m_gameScene->SpawnMedkit(m_pos);
-                }
-                //respawnTimer = rand() % 180 + 120;
-                score->Add(300);
-            }
+                b.Flg = false;
+                m_gameScene->AddExplosion(b.pos);
+                m_hp--;
 
+                if (m_hp <= 0)
+                {
+                    m_hp = 0;
+                    m_aliveFlg = false;
+                    destructionFlg = true;
+                    destructionAnim = 0;
+                    int r = rand() % 100;
+                    if (r < 10)
+                    {
+                        m_gameScene->SpawnMedkit(m_pos);
+                    }
+                    //respawnTimer = rand() % 180 + 120;
+                    score->Add(500);
+                    player->Exp(5);
+                }
+
+                break;
+            }
+            break;
+        case PlayerType::spacegun:
+            if (dist < 32 + 6 * player->GetBulletSize())
+            {
+                if (b.lasthitEnemy == this)continue;
+                b.lasthitEnemy = this;
+                //b.Flg = false;
+                m_gameScene->AddExplosion(b.pos);
+                m_hp -= 2 + player->GetBulletSize();
+                if (m_hp <= 0)
+                {
+                    m_hp = 0;
+                    m_aliveFlg = false;
+                    destructionFlg = true;
+                    destructionAnim = 0;
+                    int r = rand() % 100;
+                    if (r < 10)
+                    {
+                        m_gameScene->SpawnMedkit(m_pos);
+                    }
+                    //respawnTimer = rand() % 180 + 120;
+                    score->Add(500);
+                    player->Exp(5);
+                }
+
+                break;
+            }
             break;
         }
     }

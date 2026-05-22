@@ -13,6 +13,11 @@
 #include"../Chara/Enemy/Frigate/Frigate.h"
 #include"../Effect/Explosion.h"
 
+C_GameScene::C_GameScene(int type)
+{
+	m_Type = type;
+}
+
 void C_GameScene::Draw()
 {
 	m_back->Draw();
@@ -92,7 +97,7 @@ void C_GameScene::Update()
 	}
 	m_back->Update();
 	m_player->Update();
-	if (!m_midBossAppeared && time > 120.0f)
+	if (!m_midBossAppeared && time > 80.0f)
 	{
 		m_midBoss = new C_Battlecruiser();
 		m_midBoss->Init();
@@ -230,6 +235,8 @@ void C_GameScene::ChangeUpdate()
 	
 }
 
+
+
 void C_GameScene::Init()
 {
 
@@ -239,41 +246,51 @@ void C_GameScene::Init()
 	if (m_score == nullptr)m_score = new C_Score;
 	if (m_spawner == nullptr)m_spawner = new C_EnemySpawner();
 	//if (m_medkit == nullptr)m_medkit = new C_Medkit;
-	playerBaseTex.Load("Texture/Player/Base/playerBase.png");
-	playerEngineTex.Load("Texture/Player/Engine Effect/Engine.png");
-	playerWeaponTex.Load("Texture/Player/Weapon/Weapon1.png");
-	playerBulletTex.Load("Texture/Player/Bullet/bullet1.png");
+	playerBaseTex.Load("Texture/Player/Base/CannonplayerBase.png");
+	playerEngineTex.Load("Texture/Player/Engine Effect/CannonEngine.png");
+	playerWeaponTex.Load("Texture/Player/Weapon/CannonWeapon.png");
+	playerBulletTex.Load("Texture/Player/Bullet/CannonBullet.png");
 	playerHpTex.Load("Texture/UI/GameScene/PlayerHpBar.png");
 	tableTex.Load("Texture/UI/GameScene/Table.png");
-	playerShieldTex.Load("Texture/Player/Shield/Shield.png");
+	playerShieldTex.Load("Texture/Player/Shield/PlayerShield.png");
 	backTex.Load("Texture/Back/back1.png");
-	scoutBaseTex.Load("Texture/Enemy/Base/ScoutBase.png");
-	scoutEngineTex.Load("Texture/Enemy/Engine/ScoutEngine.png");
-	scoutBulletTex.Load("Texture/Enemy/Bullet/Bullet1_transparent.png");
+	scoutBaseTex.Load("Texture/Enemy/Base/ScoutBase1.png");
+	scoutEngineTex.Load("Texture/Enemy/Engine/ScoutEngine1.png");
+	scoutBulletTex.Load("Texture/Enemy/Bullet/Torpedo.png");
 	scoutDestructionTex.Load("Texture/Enemy/Destruction/ScoutDestruction.png");
 	scoutShieldTex.Load("Texture/Enemy/Shield/ScoutShield.png");
-	fighterBaseTex.Load("Texture/Enemy/Base/FighterBase.png");
-	fighterBulletTex.Load("Texture/Enemy/Bullet/BigBullet.png");
-	fighterEngineTex.Load("Texture/Enemy/Engine/FighterEngine.png");
-	fighterDestructionTex.Load("Texture/Enemy/Destruction/FighterDestruction.png");
+	fighterBaseTex.Load("Texture/Enemy/Base/FighterBase1.png");
+	fighterBulletTex.Load("Texture/Enemy/Bullet/NautolanBullet.png");
+	fighterEngineTex.Load("Texture/Enemy/Engine/FighterEngine1.png");
+	fighterDestructionTex.Load("Texture/Enemy/Destruction/FighterDestruction1.png");
 	fighterShieldTex.Load("Texture/Enemy/Shield/FighterShield.png");
-	medkitTex.Load("Texture/Item/medkit_item.png");
+	medkitTex.Load("Texture/Item/shield.png");
 	scoreTex.Load("Texture/UI/GameScene/Score.png");
 	numTex.Load("Texture/UI/GameScene/num.png");
-	midBossBaseTex.Load("Texture/Enemy/Base/BattlecruiserBase.png");
-	midBossDestructionTex.Load("Texture/Enemy/Destruction/BattlecruiserDestruction.png");
+	midBossBaseTex.Load("Texture/Enemy/Base/BattlecruiserBase1.png");
+	midBossDestructionTex.Load("Texture/Enemy/Destruction/BattlecruiserDestruction1.png");
 	midBossBulletTex.Load("Texture/Enemy/Bullet/SpinningBullet.png");
-	midBossEngineTex.Load("Texture/Enemy/Engine/BattlecruiserEngine.png");
+	midBossEngineTex.Load("Texture/Enemy/Engine/BattlecruiserEngine1.png");
 	midBossHpBarTex.Load("Texture/UI/GameScene/hpbar1.png");
 	midBossHpframeTex.Load("Texture/UI/GameScene/hpframe1.png");
-	midBossShieldTex.Load("Texture/Enemy/Shield/BattlecruiserShield.png");
+	midBossShieldTex.Load("Texture/Enemy/Shield/BattlecruiserShield1.png");
 	feadoutTex.Load("Texture/Back/feadout.png");
-	frigateBaseTex.Load("Texture/Enemy/Base/FrigateBase.png");
+	frigateBaseTex.Load("Texture/Enemy/Base/FrigateBase1.png");
 	frigateBulletTex.Load("Texture/Enemy/Bullet/BigSpaceGun.png");
-	frigateEngineTex.Load("Texture/Enemy/Engine/FrigateEngine.png");
-	frigateDestructionTex.Load("Texture/Enemy/Destruction/FrigateDestruction.png");
+	frigateEngineTex.Load("Texture/Enemy/Engine/FrigateEngine1.png");
+	frigateDestructionTex.Load("Texture/Enemy/Destruction/FrigateDestruction1.png");
 	sousaTex.Load("Texture/UI/GameScene/sousa1.png");
 	explosionTex.Load("Texture/Effect/explosion.png");
+	spacegunBaseTex.Load("Texture/Player/Base/SpaceGunPlayerBase.png");
+	spaceGunBulletTex.Load("Texture/Player/Bullet/SpaceGunBullet.png");
+	spacegunEffectTex.Load("Texture/Player/Engine Effect/SpaceGunEngine.png");
+	spacegunWeaponTex.Load("Texture/Player/Weapon/SpaceGunWeapon.png");
+	rocketBaseTex.Load("Texture/Player/Base/RocketPlayerBase.png");
+	rocketBulletTex.Load("Texture/Player/Bullet/RocketBullet.png");
+	rocketEffectTex.Load("Texture/Player/Engine Effect/RocketEngine.png");
+	rocketWeaponTex.Load("Texture/Player/Weapon/RocketWeapon.png");
+	HealTex.Load("Texture/Effect/Heal.png");
+
 
 	m_spawner->SetScoutBaseTex(&scoutBaseTex);
 	m_spawner->SetScoutEngineTex(&scoutEngineTex);
@@ -297,14 +314,24 @@ void C_GameScene::Init()
 	m_spawner->SetFighterList(&m_fighter);
 	m_spawner->SetFrigateList(&m_frigate);
 
+	m_player->SetType(m_Type);
 	m_player->SetBaseTex(&playerBaseTex);
 	m_player->SetEngineTex(&playerEngineTex);
 	m_player->SetWeaponTex(&playerWeaponTex);
 	m_player->SetBulletTex(&playerBulletTex);
+	m_player->SetSpaceGunTex(&spaceGunBulletTex);
+	m_player->SetSpaceGunBaseTex(&spacegunBaseTex);
+	m_player->SetSpaceGunEffectTex(&spacegunEffectTex);
+	m_player->SetSpaceGunWeaponTex(&spacegunWeaponTex);
+	m_player->SetRocketTex(&rocketBulletTex);
+	m_player->SetRocketBaseTex(&rocketBaseTex);
+	m_player->SetRocketEffectTex(&rocketEffectTex);
+	m_player->SetRocketWeaponTex(&rocketWeaponTex);
 	m_playerhp->SetTex(&playerHpTex);
 	m_playerhp->SetTableTex(&tableTex);
 	m_playerhp->SetGuideTex(&sousaTex);
 	m_player->SetShieldTex(&playerShieldTex);
+	m_player->SetHealTex(&HealTex);
 
 	m_score->SetTex(&numTex);
 	m_score->SetScoreTex(&scoreTex);
@@ -365,6 +392,14 @@ void C_GameScene::Release()
 	frigateDestructionTex.Release();
 	sousaTex.Release();
 	explosionTex.Release();
+	spacegunBaseTex.Release();
+	spacegunEffectTex.Release();
+	spacegunWeaponTex.Release();
+	rocketBaseTex.Release();
+	rocketBulletTex.Release();
+	rocketEffectTex.Release();
+	rocketWeaponTex.Release();
+	HealTex.Release();
 }
 
 void C_GameScene::SpawnMedkit(const Math::Vector2& pos)
@@ -382,3 +417,60 @@ void C_GameScene::AddExplosion(Math::Vector2 pos)
 	ex->SetExplosionTex(&explosionTex);   
 	m_explosion.push_back(ex);
 }
+
+C_CharaBase* C_GameScene::FindNearestEnemy(const Math::Vector2& pos)
+{
+	float minDist = 999999.0f;
+	C_CharaBase* nearest = nullptr;
+
+	// Scout
+	for (auto* e : m_scout)
+	{
+		if (!e->GetAlive()) continue;
+
+		float dx = e->GetPos().x - pos.x;
+		float dy = e->GetPos().y - pos.y;
+		float dist = dx * dx + dy * dy;
+
+		if (dist < minDist)
+		{
+			minDist = dist;
+			nearest = e;
+		}
+	}
+
+	// Fighter
+	for (auto* e : m_fighter)
+	{
+		if (!e->GetAlive()) continue;
+
+		float dx = e->GetPos().x - pos.x;
+		float dy = e->GetPos().y - pos.y;
+		float dist = dx * dx + dy * dy;
+
+		if (dist < minDist)
+		{
+			minDist = dist;
+			nearest = e;
+		}
+	}
+
+	// Frigate
+	for (auto* e : m_frigate)
+	{
+		if (!e->GetAlive()) continue;
+
+		float dx = e->GetPos().x - pos.x;
+		float dy = e->GetPos().y - pos.y;
+		float dist = dx * dx + dy * dy;
+
+		if (dist < minDist)
+		{
+			minDist = dist;
+			nearest = e;
+		}
+	}
+
+	return nearest;
+}
+

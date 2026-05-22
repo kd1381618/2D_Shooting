@@ -63,16 +63,17 @@ void C_EnemySpawner::SpawnEnemyByTime()
     // Œo‰ß•b”‚Å“G‚Ìí—Ş‚ğ•Ï‚¦‚é
     float elapsedSec = m_timeFrame / 60.0f;
 
-    if (elapsedSec < 30)
+    if (elapsedSec < 20)
     {
         SpawnScout();
+        //SpawnFrigate();
     }
-    else if (elapsedSec < 60)
+    else if (elapsedSec < 40)
     {
         if (rand() % 100 < 50) SpawnScout();
         else SpawnFighter();
     }
-    else if(elapsedSec<90)
+    else if(elapsedSec<60)
     {
         int r = rand() % 100;
         if (r < 40) SpawnScout();

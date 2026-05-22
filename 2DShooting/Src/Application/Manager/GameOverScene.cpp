@@ -84,10 +84,10 @@ void C_GameOverScene::Update()
 	m_backMat = transmat;
 	Math::Matrix transmat2 = Math::Matrix::CreateTranslation(m_pos.x + 1280, 0, 0);
 	m_backMat2 = transmat2;
-	Math::Matrix hometransmat = Math::Matrix::CreateTranslation(0, -100, 0);
+	Math::Matrix hometransmat = Math::Matrix::CreateTranslation(0, -200, 0);
 	Math::Matrix homescalemat = Math::Matrix::CreateScale(homescale.x, homescale.y, 1);
 	homemat = homescalemat * hometransmat;
-	Math::Matrix returntransmat = Math::Matrix::CreateTranslation(0, -200, 0);
+	Math::Matrix returntransmat = Math::Matrix::CreateTranslation(0, -100, 0);
 	Math::Matrix returnscalemat = Math::Matrix::CreateScale(returnscale.x, returnscale.y, 1);
 	returnmat = returnscalemat * returntransmat;
 }
@@ -95,8 +95,8 @@ void C_GameOverScene::ChangeUpdate()
 {
 	if (m_goGame)
 	{
-		SCENE.SetNowScene(changeScene::Game);
-		SCENEMANAGER.ChangeState(new C_GameScene());
+		SCENE.SetNowScene(changeScene::Select);
+		SCENEMANAGER.ChangeState(new C_SelectScene());
 	}
 	else if (m_goTitle)
 	{

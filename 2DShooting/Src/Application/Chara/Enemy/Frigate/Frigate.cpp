@@ -16,9 +16,8 @@ C_Frigate::~C_Frigate()
 void C_Frigate::Init()
 {
 
-    m_hpMax = 3;
+    m_hpMax = 10;
     m_hp = m_hpMax;
-
 
     m_aliveFlg = true;
 
@@ -187,26 +186,60 @@ void C_Frigate::PlayerBulletHit()
 
 
 
-        if (dist < 40)
+        switch (player->GetType())
         {
-            b.Flg = false;
-            m_gameScene->AddExplosion(b.pos);
-            m_hp--;
-
-            if (m_hp <= 0)
+        case PlayerType::cannon:
+            if (dist < 33)
             {
-                m_hp = 0;
-                m_aliveFlg = false;
-                destructionFlg = true;
-                destructionAnim = 0;
-                int r = rand() % 100;
-                if (r < 20)
-                {
-                    m_gameScene->SpawnMedkit(m_pos);
-                }
-                score->Add(500);
-            }
+                b.Flg = false;
+                m_gameScene->AddExplosion(b.pos);
+                m_hp--;
 
+                if (m_hp <= 0)
+                {
+                    m_hp = 0;
+                    m_aliveFlg = false;
+                    destructionFlg = true;
+                    destructionAnim = 0;
+                    int r = rand() % 100;
+                    if (r < 10)
+                    {
+                        m_gameScene->SpawnMedkit(m_pos);
+                    }
+                   // respawnTimer = rand() % 180 + 120;
+                    score->Add(1000);
+                    player->Exp(10);
+                }
+
+                break;
+            }
+            break;
+        case PlayerType::spacegun:
+            if (dist < 32+6*player->GetBulletSize())
+            {
+                if (b.lasthitEnemy == this)continue;
+
+                b.lasthitEnemy = this;
+                m_gameScene->AddExplosion(b.pos);
+                m_hp -= 2 + player->GetBulletSize();
+                if (m_hp <= 0)
+                {
+                    m_hp = 0;
+                    m_aliveFlg = false;
+                    destructionFlg = true;
+                    destructionAnim = 0;
+                    int r = rand() % 100;
+                    if (r < 10)
+                    {
+                        m_gameScene->SpawnMedkit(m_pos);
+                    }
+                    //respawnTimer = rand() % 180 + 120;
+                    score->Add(1000);
+                    player->Exp(10);
+                }
+
+                break;
+            }
             break;
         }
     }
@@ -245,8 +278,9 @@ void C_Frigate::Draw()
 {
     for (auto& b : frigatebullet)
     {
+        b.color = { 1,1,0,1 };
         SHADER.m_spriteShader.SetMatrix(b.mat);
-        SHADER.m_spriteShader.DrawTex(m_bulletTex, b.rect);
+        SHADER.m_spriteShader.DrawTex_Color(m_bulletTex, b.rect,b.color);
     }
     if (destructionFlg)
     {

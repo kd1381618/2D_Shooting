@@ -19,7 +19,7 @@ void C_Battlecruiser::Init()
     m_pos = { 700.0f, 0.0f };
     m_phase = 0;
     m_timer = 0;
-    m_hpMax = 150;
+    m_hpMax = 300;
     m_rect = { 0,0,128,128 };
     hpframerect = { 0,0,38,15 };
     hpbarrect = { 0,0,32,5 };
@@ -32,7 +32,7 @@ void C_Battlecruiser::Init()
     Shieldanim = 0;
     m_scalemat = Math::Matrix::CreateScale(3, 3, 1);
     m_rotatemat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(90));
-    hpframescale = Math::Matrix::CreateScale(4, 4, 1);
+    hpframescale = Math::Matrix::CreateScale(15, 5, 1);
     m_prevPhase = 1;
     m_phaseDelay = 240;
 }
@@ -135,10 +135,10 @@ void C_Battlecruiser::Update()
     }
     m_transmat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
     m_mat = m_scalemat*m_rotatemat * m_transmat;
-    hpframetrans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y + 150, 0);
+    hpframetrans = Math::Matrix::CreateTranslation(0, 320, 0);
     hpframemat = hpframescale * hpframetrans;
-    hpbarscale = Math::Matrix::CreateScale((4.0f/150)*m_hp,4, 1);
-    hpbartrans = Math::Matrix::CreateTranslation(m_pos.x-(m_hpMax-m_hp)/2.5, m_pos.y + 150 + 4, 0);
+    hpbarscale = Math::Matrix::CreateScale((15.0f/300)*m_hp,5, 1);
+    hpbartrans = Math::Matrix::CreateTranslation(0-(m_hpMax-m_hp)/1.325, 320+5, 0);
     hpbarmat = hpbarscale * hpbartrans;
 }
 void C_Battlecruiser::PlayerBulletHit()
@@ -158,27 +158,56 @@ void C_Battlecruiser::PlayerBulletHit()
         float dist = sqrtf(dx * dx + dy * dy);
 
 
-
-        if (dist < 100)
+        switch (player->GetType())
         {
-            b.Flg = false;
-            m_gameScene->AddExplosion(b.pos);
-            if (m_phase == 0)return;
-            if (m_phaseDelay > 0)return;
-            m_hp--;
-            
-            if (m_hp <= 0)
+        case PlayerType::cannon:
+            if (dist < 100)
             {
-                m_hp = 0;
-                m_aliveFlg = false;
-                destructionFlg = true;
-                destructionAnim = 0;
-                score->Add(15000);
-                m_gameScene->SetclearFlg(true);
-            }
+                b.Flg = false;
+                m_gameScene->AddExplosion(b.pos);
+                if (m_phase == 0)return;
+                if (m_phaseDelay > 0)return;
+                m_hp--;
 
+                if (m_hp <= 0)
+                {
+                    m_hp = 0;
+                    m_aliveFlg = false;
+                    destructionFlg = true;
+                    destructionAnim = 0;
+                    score->Add(15000);
+                    m_gameScene->SetclearFlg(true);
+                }
+
+                break;
+            }
+            break;
+        case PlayerType::spacegun:
+             if (dist < 100+6*player->GetBulletSize())
+            {
+                //b.Flg = false;
+                 if (b.lasthitEnemy == this)continue;
+                 b.lasthitEnemy = this;
+                m_gameScene->AddExplosion(b.pos);
+                if (m_phase == 0)return;
+                if (m_phaseDelay > 0)return;
+                m_hp -= 2 + player->GetBulletSize();
+
+                if (m_hp <= 0)
+                {
+                    m_hp = 0;
+                    m_aliveFlg = false;
+                    destructionFlg = true;
+                    destructionAnim = 0;
+                    score->Add(15000);
+                    m_gameScene->SetclearFlg(true);
+                }
+
+                break;
+            }
             break;
         }
+       
     }
 }
 

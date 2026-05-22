@@ -3,6 +3,7 @@
 enum changeScene//シーン変更用
 {
 	Title,
+	Select,
 	Game,
 	Clear,
 	GameOver

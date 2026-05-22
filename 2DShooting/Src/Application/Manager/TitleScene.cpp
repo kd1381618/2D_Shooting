@@ -9,13 +9,13 @@ void C_TitleScene::Init()
 	m_backTex.Load("Texture/TitleScene/Titleback.png");
 	m_startTex.Load("Texture/TitleScene/START.png");
 	m_exitTex.Load("Texture/TitleScene/EXIT.png");
-	m_titleTex.Load("Texture/TitleScene/VOIDBLITZ.png");
+	m_titleTex.Load("Texture/TitleScene/SPACEBLITZ.png");
 	m_pos = { 0,0 };
 	m_rect = { 0,0,1280,720 };
 	m_startscale = { 1,1 };
 	m_startrect = { 0,0,300,135 };
 	m_exitrect = { 0,0,236,135 };
-	m_titlerect = { 0,0,1024,255 };
+	m_titlerect = { 0,0,1092,255 };
 	m_exitscale={ 1,1 };
 	m_titlemat = Math::Matrix::CreateTranslation(0, 150, 0);
 }
@@ -23,11 +23,11 @@ void C_TitleScene::ChangeUpdate()
 {
 	if (m_goGame)
 	{
-		SCENEMANAGER.ChangeState(new C_GameScene());
+		SCENEMANAGER.ChangeState(new C_SelectScene());
 	}
 	else if (m_goExit)
 	{
-		
+		SCENEMANAGER.ExitApp();
 	}
 }
 void C_TitleScene::Update()
@@ -57,7 +57,7 @@ void C_TitleScene::Update()
 			m_goGame = true;
 			break;
 		case 1:
-			SCENEMANAGER.ExitApp();	
+			m_goExit = true;
 		}
 	}
 

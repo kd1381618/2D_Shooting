@@ -18,6 +18,7 @@ struct Bullet
 	float ang;
 	float deg;
 	float anim;
+	float turnSpeed;
 	Math::Matrix transmat;
 	Math::Matrix scalemat;
 	Math::Matrix rotatemat;
@@ -32,7 +33,7 @@ struct Bullet
 	// •ª—ô’e—p
 	bool split;
 	int splitTimer;
-
+	void* lasthitEnemy = nullptr;
 
 	enum BulletType {
 		Converge,
@@ -48,7 +49,7 @@ struct Bullet
 	Bullet()
 		: pos{ 0,0 }
 		, move{ 0,0 }
-	    , scale(1)
+		, scale(1)
 		, Flg(false)
 		, Angle(0)
 		, shotCnt(0)
@@ -60,6 +61,7 @@ struct Bullet
 		, ang(0)
 		, deg(0)
 		, anim(0)
+		, turnSpeed(0.05)
 		, transmat(Math::Matrix::Identity)
 		, scalemat(Math::Matrix::Identity)
 		, rotatemat(Math::Matrix::Identity)
@@ -94,6 +96,7 @@ public:
 	void SetPos(Math::Vector2 pos) { m_pos = pos; }
 	float GetRadius() { return m_radius; }
 	bool GetAlive() { return m_aliveFlg; }
+	Math::Vector2 GetPos() { return m_pos; }
 
 	protected:
 	KdTexture* m_tex;
@@ -125,5 +128,5 @@ public:
 	bool destructionFlg;
 	const float turnDeg=5.0f;
 	float m_radius;
-	
+	bool hitflg;
 };

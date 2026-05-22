@@ -34,7 +34,7 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	// ウィンドウ作成
 	//===================================================================
-	if (m_window.Create(w, h, "VOID BLITZ", "Window") == false) {
+	if (m_window.Create(w, h, "SPACE BLITZ", "Window") == false) {
 		MessageBoxA(nullptr, "ウィンドウ作成に失敗", "エラー", MB_OK);
 		return false;
 	}
@@ -252,6 +252,7 @@ void Application::Execute()
 		}
 
 	}
+
 
 	// ゲーム解放
 	SCENE.Release();
